@@ -8,4 +8,4 @@ Content:
 Image:
 ------
 
-![Image](https://raw.githubusercontent.com/WHKnightZ/Gravity_Duck/master/Image.png)
+![Image](https://raw.githubusercontent.com/WHKnightZ/Gravity_Duck/master/Image2.png)

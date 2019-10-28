@@ -1,17 +1,11 @@
 # Gravity Duck
-# H1
-## H2
-### H3
-#### H4
-##### H5
-###### H6
 
-Alternatively, for H1 and H2, an underline-ish style:
+Game made by C++ OpenGL
 
-Alt-H1
+Content:
 ======
 
-Alt-H2
+Image:
 ------
 
 ![Image](https://raw.githubusercontent.com/WHKnightZ/Gravity_Duck/master/Image.png)

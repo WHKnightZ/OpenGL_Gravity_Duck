@@ -1,0 +1,126 @@
+arrow1.png
+114 66 12 5
+bird_drop1.png
+96 18 6 7
+bkg4_cog_wheel1.png
+2 2 50 50
+bkg4_crane1.png
+104 107 5 10
+bkg4_flag1.png
+114 52 12 12
+bkg4_flag2.png
+114 38 12 12
+bkg4_flag3.png
+82 38 12 12
+bkg4_flag4.png
+56 114 12 12
+bkg4_pump1.png
+94 55 5 10
+bkg4_pump2.png
+98 76 5 6
+bkg4_pump3.png
+104 119 5 6
+bkg4_pump4.png
+101 66 5 8
+bkg4_pump5.png
+101 56 5 8
+bkg4_pump6.png
+96 43 5 10
+bullet1.png
+122 16 4 6
+egg1.png
+96 89 16 16
+egg10.png
+80 71 16 16
+egg11.png
+78 20 16 16
+egg12.png
+2 120 16 6
+egg2.png
+78 2 16 16
+egg3.png
+64 53 16 16
+egg4.png
+104 20 16 16
+egg5.png
+104 2 16 16
+egg6.png
+86 108 16 16
+egg7.png
+78 90 16 16
+egg8.png
+62 72 16 16
+egg9.png
+46 54 16 16
+egg_pick_up1.png
+96 35 6 6
+egg_pick_up2.png
+114 97 10 10
+egg_pick_up3.png
+60 94 16 16
+egg_pick_up4.png
+24 54 20 20
+explosion1.png
+2 98 20 20
+explosion2.png
+42 114 12 12
+flyer_bullet1.png
+24 114 2 4
+flyer_power_up1.png
+2 76 20 20
+flyer_power_up2.png
+44 76 16 16
+flyer_power_up3.png
+114 85 10 10
+flyer_power_up4.png
+96 27 6 6
+flyer_power_up5.png
+82 108 2 2
+flyer_shoot1.png
+20 120 6 6
+flyer_shoot2.png
+68 43 8 8
+flyer_shoot3.png
+70 112 14 14
+flyer_shoot4.png
+24 76 18 18
+flyer_shoot5.png
+2 54 20 20
+gravity_well1.png
+122 2 4 12
+gravity_well2_1.png
+42 96 16 16
+gravity_well2_2.png
+24 96 16 16
+gravity_well2_3.png
+28 114 12 12
+gravity_well2_4.png
+114 73 10 10
+particle1.png
+78 108 2 2
+particle2.png
+74 90 2 2
+particle3.png
+70 90 2 2
+particle4.png
+66 90 2 2
+particle5.png
+62 90 2 2
+particle6.png
+58 72 2 2
+particle7.png
+54 72 2 2
+particle8.png
+50 72 2 2
+particle9.png
+46 72 2 2
+shooter_bullet1.png
+122 24 4 4
+transport_splash1.png
+54 43 12 8
+transport_splash2.png
+82 52 10 10
+transport_splash3.png
+96 2 6 14
+transport_splash4.png
+104 38 8 16

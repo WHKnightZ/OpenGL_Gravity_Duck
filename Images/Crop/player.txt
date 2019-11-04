@@ -1,0 +1,30 @@
+player_idle.png
+18 28 14 16
+player_spawn1.png
+18 20 4 4
+player_spawn2.png
+12 56 6 6
+player_spawn3.png
+2 56 8 6
+player_spawn4.png
+48 28 8 8
+player_spawn5.png
+52 16 10 10
+player_spawn6.png
+52 2 10 12
+player_spawn7.png
+34 20 12 14
+player_spawn8.png
+18 28 14 16
+player_walk1.png
+36 2 14 16
+player_walk2.png
+20 2 14 16
+player_walk3.png
+20 46 12 16
+player_walk4.png
+2 38 14 16
+player_walk5.png
+2 20 14 16
+player_walk6.png
+2 2 14 16

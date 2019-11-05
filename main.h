@@ -92,33 +92,33 @@ class c_Enemy {
     int Stt, Drt, Move, Move_Max;
     Rect Rct, Hitbox;
     void Collision();
-    virtual void Draw(){}
-    virtual void Action(){}
+    virtual void Draw() {}
+    virtual void Action() {}
 };
 
 c_Enemy *Enemy[ENEMY_MAX];
 int Enemy_Count;
 
-class c_Enemy_Block_Hon: public c_Enemy{
-	public:
-		c_Enemy_Block_Hon(int x, int y, int Drt, int Move, int Move_Max);
-		~c_Enemy_Block_Hon(){}
-		float vx;
-		void Draw();
-		void Action();
+class c_Enemy_Block_Hon : public c_Enemy {
+  public:
+    c_Enemy_Block_Hon(int x, int y, int Drt, int Move, int Move_Max);
+    ~c_Enemy_Block_Hon() {}
+    float vx;
+    void Draw();
+    void Action();
 };
 
 Image Img_Enemy_Block;
-int Enemy_Block_W=32, Enemy_Block_H=32;
-float Enemy_Block_Hitbox_W=22.0f, Enemy_Block_Hitbox_H=22.0f;
+int Enemy_Block_W = 32, Enemy_Block_H = 32;
+float Enemy_Block_Hitbox_W = 22.0f, Enemy_Block_Hitbox_H = 22.0f;
 
-class c_Enemy_Block_Ver: public c_Enemy{
-	public:
-		c_Enemy_Block_Ver(int x, int y, int Drt, int Move, int Move_Max);
-		~c_Enemy_Block_Ver(){}
-		float vy;
-		void Draw();
-		void Action();
+class c_Enemy_Block_Ver : public c_Enemy {
+  public:
+    c_Enemy_Block_Ver(int x, int y, int Drt, int Move, int Move_Max);
+    ~c_Enemy_Block_Ver() {}
+    float vy;
+    void Draw();
+    void Action();
 };
 
 class c_Switch {
@@ -142,7 +142,8 @@ Rect Rct_Switch;
 int Menu_Stt, Menu_Time, Menu_Active, Menu_Choice, Menu_Form_Stt, Menu_Max_Lvl;
 float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset;
 Rect Rct_Menu_Main, Rct_Menu_Btn[2], Rct_Menu_Lvl, Rct_Menu_Btn_Lvl;
-int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init, Game_Dest_Gra;;
+int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init, Game_Dest_Gra;
+;
 float Game_Alpha;
 Rect Rct_Egg, Rct_Egg_Pick;
 int Game_Stt_Egg, Game_Stt_Egg_Pick;

@@ -4,14 +4,14 @@ c_Switch::c_Switch() {
 c_Switch::~c_Switch() {
 }
 
-void c_Switch::Set(float x, float y){
-	this->x=x;
-	this->y=y;
-	Is_Touch = 0;
-    Hitbox.Left=x-HITBOX_SWITCH;
-    Hitbox.Right=x+HITBOX_SWITCH;
-    Hitbox.Bottom=y-HITBOX_SWITCH;
-    Hitbox.Top=y+HITBOX_SWITCH;
+void c_Switch::Set(float x, float y) {
+    this->x = x;
+    this->y = y;
+    Is_Touch = 0;
+    Hitbox.Left = x - HITBOX_SWITCH;
+    Hitbox.Right = x + HITBOX_SWITCH;
+    Hitbox.Bottom = y - HITBOX_SWITCH;
+    Hitbox.Top = y + HITBOX_SWITCH;
 }
 
 void Switch_Draw() {

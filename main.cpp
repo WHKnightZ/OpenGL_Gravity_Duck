@@ -102,17 +102,9 @@ void Init_Game() {
     Rct_Switch.Top = Rct_Switch.Right = SWITCH_SIZE;
     Load_Tile();
     Load_Player();
-    Menu_Choice = 0;
     Init_Level();
-    Menu_Alpha = 1.0f;
-    Menu_Alpha_Offset = -0.03f;
-    Menu_Stt = 0;
-    Menu_Time = 0;
-    Menu_Form_Stt = 0;
-    Menu_Active = 1;
     Menu_Offset = MENU_BG_MAX_OFFSET;
     Game_Init = 0;
-    Game_Import = 1;
 }
 
 void Timer(int value) {
@@ -129,8 +121,8 @@ void Timer(int value) {
     } else {
         Game_Process_Func[Game_Stt]();
         Switch_Action();
-        for (int i=0;i<Enemy_Count;i++)
-    		Enemy[i]->Action();
+        for (int i = 0; i < Enemy_Count; i++)
+            Enemy[i]->Action();
     }
     glutPostRedisplay();
     glutTimerFunc(INTERVAL, Timer, 0);
@@ -146,9 +138,7 @@ int main(int argc, char **argv) {
     glutCreateWindow("Gravity Duck");
     Init_Game();
     glutTimerFunc(0, Timer, 0);
-    glutDisplayFunc(Menu_Display);
-    glutKeyboardFunc(Menu_Keyboard);
-    glutSpecialFunc(Menu_Special);
+    Go_Menu();
     glutMainLoop();
     return 0;
 }

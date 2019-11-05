@@ -4,17 +4,17 @@ c_Player::c_Player() {
 c_Player::~c_Player() {
 }
 
-void c_Player::Import(int x, int y, int Gra){
-	s_x=x;
-	s_y=y;
-	s_Gra=Gra;
+void c_Player::Import(int x, int y, int Gra) {
+    s_x = x;
+    s_y = y;
+    s_Gra = Gra;
 }
 
-void c_Player::Reload(){
-	x = s_x;
+void c_Player::Reload() {
+    x = s_x;
     y = s_y;
-    Is_Run=Is_Jump=0;
-    vx = vy =0.0f;
+    Is_Run = Is_Jump = 0;
+    vx = vy = 0.0f;
     Gra = s_Gra;
     Drt = 1;
     Stt = 0;
@@ -26,11 +26,11 @@ void c_Player::Reload(){
     Rct.Top = y + PLAYER_SIZE;
 }
 
-void c_Player::Set_Rct_Dead(){
-	Rct_Dead.Left=Rct.Left-4;
-	Rct_Dead.Right=Rct_Dead.Left+40;
-	Rct_Dead.Bottom=Rct.Bottom-4;
-	Rct_Dead.Top=Rct_Dead.Bottom+40;
+void c_Player::Set_Rct_Dead() {
+    Rct_Dead.Left = Rct.Left - 4;
+    Rct_Dead.Right = Rct_Dead.Left + 40;
+    Rct_Dead.Bottom = Rct.Bottom - 4;
+    Rct_Dead.Top = Rct_Dead.Bottom + 40;
 }
 
 void Load_Player() {

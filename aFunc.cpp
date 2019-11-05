@@ -51,10 +51,10 @@ void Game_Display_Dead() {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void Game_Display_Pick(){
-	Game_Display_Play();
-	Map_Texture(&Img_Egg_Pick[Game_Stt_Egg_Pick]);
-	Draw_Rect(&Rct_Egg_Pick);
+void Game_Display_Pick() {
+    Game_Display_Play();
+    Map_Texture(&Img_Egg_Pick[Game_Stt_Egg_Pick]);
+    Draw_Rect(&Rct_Egg_Pick);
 }
 
 void Game_Process_Begin() {
@@ -107,7 +107,7 @@ void Game_Process_Dead() {
     }
 }
 
-void Game_Process_Pick(){
+void Game_Process_Pick() {
     Player.vx += Player.gx;
     Player.vy += Player.gy;
     i_vx = (int)Player.vx;
@@ -121,13 +121,13 @@ void Game_Process_Pick(){
     else if (i_vy > 0)
         Player_Move_Up();
     Game_Time = Loop_Time[Game_Time];
-    if (Game_Time == 0){
-    	Game_Stt_Egg_Pick++;
-    	if (Game_Stt_Egg_Pick==4){
-    		Game_Stt = GAME_STT_WIN;
-        	Player.Stt = 7;
-		}
-	}
+    if (Game_Time == 0) {
+        Game_Stt_Egg_Pick++;
+        if (Game_Stt_Egg_Pick == 4) {
+            Game_Stt = GAME_STT_WIN;
+            Player.Stt = 7;
+        }
+    }
 }
 
 void Game_Process_Win() {
@@ -164,10 +164,10 @@ void Collision_Tile_Trap() {
 
 void Collision_Tile_Dest() {
     if (Player.Gra == Game_Dest_Gra && Game_Stt != GAME_STT_PICK && Game_Stt != GAME_STT_WIN) {
-    	Game_Stt_Egg=1;
-    	Game_Stt_Egg_Pick=0;
+        Game_Stt_Egg = 1;
+        Game_Stt_Egg_Pick = 0;
         Game_Stt = GAME_STT_PICK;
-        Player.vx = Player.vy =0.0f;
+        Player.vx = Player.vy = 0.0f;
         glutKeyboardFunc(NULL);
         glutSpecialFunc(NULL);
         glutSpecialUpFunc(NULL);

@@ -57,7 +57,7 @@ void Menu_Keyboard(unsigned char key, int x, int y) {
                 Menu_Choice = 1;
                 Set_Rect_Btn_Lvl();
             } else {
-            	// system("xdg-open https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og"); ubuntu
+                // system("xdg-open https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og"); ubuntu
                 system("start https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og");
             }
         } else {
@@ -114,4 +114,18 @@ void Menu_Special(int key, int x, int y) {
             break;
         }
     }
+}
+
+void Go_Menu() {
+    Menu_Active = 1;
+    Menu_Stt = 0;
+    Menu_Time = 0;
+    Menu_Form_Stt = 0;
+    Menu_Choice = 0;
+    Menu_Alpha = 1.0f;
+    Menu_Alpha_Offset = -0.03f;
+    Game_Import = 1;
+    glutDisplayFunc(Menu_Display);
+    glutKeyboardFunc(Menu_Keyboard);
+    glutSpecialFunc(Menu_Special);
 }

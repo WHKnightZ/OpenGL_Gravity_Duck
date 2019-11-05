@@ -14,7 +14,7 @@
 
 #define TILE_SIZE 32
 #define TILE_SIZE_HALF 16
-#define TILE_MAX 48
+#define TILE_MAX 44
 
 #define SWITCH_MAX 6
 #define SWITCH_SIZE 20
@@ -53,8 +53,8 @@ enum GAME_STATUS {
 enum COLLISION_TILE {
     CL_TILE_WALL,
     CL_TILE_NOTHING,
-    CL_TILE_DEST,
-    CL_TILE_TRAP
+    CL_TILE_TRAP,
+    CL_TILE_DEST
 };
 
 struct Rect {
@@ -142,8 +142,10 @@ Rect Rct_Switch;
 int Menu_Stt, Menu_Time, Menu_Active, Menu_Choice, Menu_Form_Stt, Menu_Max_Lvl;
 float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset;
 Rect Rct_Menu_Main, Rct_Menu_Btn[2], Rct_Menu_Lvl, Rct_Menu_Btn_Lvl;
-int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init;
+int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init, Game_Dest_Gra;;
 float Game_Alpha;
+Rect Rct_Egg, Rct_Egg_Pick;
+int Game_Stt_Egg, Game_Stt_Egg_Pick;
 
 void (*Menu_Display_Func[2])();
 void (*Game_Display_Func[7])();
@@ -171,7 +173,7 @@ Image Img_Num[10];
 Image Img_Menu_BG, Img_Menu_Main, Img_Menu_Btn[2], Img_Menu_Lvl;
 Image Img_Menu_Btn_Lvl_Act, Img_Menu_Btn_Lvl_Pas, Img_Menu_Btn_Lvl[BTN_LVL_MAX];
 Image_Data Imgd_Tile[TILE_MAX];
-Image Img_Game_BG, Img_Switch;
+Image Img_Game_BG, Img_Switch, Img_Egg[4][2], Img_Egg_Pick[4];
 Rect Rct;
 Pos Pos_Menu_Btn[] = {{190.0f, 144.0f}, {190.0f, 66.0f}};
 
@@ -189,8 +191,8 @@ int Tile_Mapping[] = {CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL
                       CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL,
                       CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL,
                       CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL,
-                      CL_TILE_DEST, CL_TILE_DEST, CL_TILE_DEST, CL_TILE_DEST, CL_TILE_TRAP, CL_TILE_TRAP, CL_TILE_TRAP, CL_TILE_TRAP};
-int Dest_Gra;
+                      CL_TILE_TRAP, CL_TILE_TRAP, CL_TILE_TRAP, CL_TILE_TRAP};
+
 int A, B, C;
 
 #include "cPlayer.cpp"

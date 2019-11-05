@@ -32,12 +32,28 @@ void Create_List_Draw_Tile() {
     glEndList();
 }
 
+void Load_Egg(){
+	Load_Texture(&Img_Egg[2][0], "Images/Egg.png");
+	Load_Texture(&Img_Egg[2][1], "Images/Egg_Null.png");
+	Load_Texture(&Img_Egg_Pick[0], "Images/Egg_Pick_0.png");
+	Load_Texture(&Img_Egg_Pick[1], "Images/Egg_Pick_1.png");
+	Load_Texture(&Img_Egg_Pick[2], "Images/Egg_Pick_2.png");
+	Load_Texture(&Img_Egg_Pick[3], "Images/Egg_Pick_3.png");
+	Rotate_Left(&Img_Egg[2][0], &Img_Egg[3][0]);
+    Rotate_180(&Img_Egg[2][0], &Img_Egg[0][0]);
+    Rotate_180(&Img_Egg[3][0], &Img_Egg[1][0]);
+    Rotate_Left(&Img_Egg[2][1], &Img_Egg[3][1]);
+    Rotate_180(&Img_Egg[2][1], &Img_Egg[0][1]);
+    Rotate_180(&Img_Egg[3][1], &Img_Egg[1][1]);
+}
+
 void Import_Map(int Level) {
     sprintf(Str, "Maps/%02d.txt", Level);
     FILE *f = fopen(Str, "r");
-    int s_x, s_y, s_Gra;
+    int s_x, s_y, s_Gra, dest_x, dest_y;
     fscanf(f,"%d%d%d",&s_x,&s_y,&s_Gra);
     Player.Import(s_x, s_y, s_Gra);
+    fscanf(f,"%d%d%d",&dest_x,&dest_y,&Game_Dest_Gra);
     Max_X = 20;
     Max_Y = 15;
     for (int i = 0; i < Max_Y; i++)
@@ -52,18 +68,15 @@ void Import_Map(int Level) {
             Map_Tile[n - i][j] = tmp;
         }
     }
-    int *ptr;
     for (int i = 0; i < Max_Y; i++) {
         for (int j = 0; j < Max_X; j++) {
-            if (Map_Tile[i][j] != -1) {
-                ptr = &Map_Tile[i][j];
-                Map[i][j] = Tile_Mapping[*ptr];
-                if (Map[i][j]==CL_TILE_DEST)
-                    Dest_Gra = *ptr - CL_TILE_DEST_FIRST;
-            } else
+            if (Map_Tile[i][j] != -1)
+                Map[i][j] = Tile_Mapping[Map_Tile[i][j]];
+            else
                 Map[i][j] = 1;
         }
     }
+    Map[dest_y][dest_x]=CL_TILE_DEST;
     fscanf(f, "%d", &Switch_Count);
     for (int i = 0; i < Switch_Count; i++) {
         fscanf(f, "%d%d", &tmp, &tmp2);
@@ -84,6 +97,15 @@ void Import_Map(int Level) {
 			break;
 		}
     }
+    int x=dest_x*TILE_SIZE + TILE_SIZE_HALF, y=dest_y*TILE_SIZE + TILE_SIZE_HALF;
+    Rct_Egg.Left=x-Img_Egg[Game_Dest_Gra][0].w/2;
+    Rct_Egg.Bottom=y-Img_Egg[Game_Dest_Gra][0].h/2;
+    Rct_Egg.Right=Rct_Egg.Left+Img_Egg[Game_Dest_Gra][0].w;
+    Rct_Egg.Top=Rct_Egg.Bottom+Img_Egg[Game_Dest_Gra][0].h;
+    Rct_Egg_Pick.Left=x-Img_Egg_Pick[0].w/2;
+    Rct_Egg_Pick.Bottom=y-Img_Egg_Pick[0].h/2;
+    Rct_Egg_Pick.Right=Rct_Egg_Pick.Left+Img_Egg_Pick[0].w;
+    Rct_Egg_Pick.Top=Rct_Egg_Pick.Bottom+Img_Egg_Pick[0].h;
     fclose(f);
     Create_List_Draw_Tile();
 }
@@ -96,6 +118,7 @@ void Reload(){
 	Game_Stt = GAME_STT_BEGIN;
     Game_Alpha = 1.0f;
     Game_Time = 0;
+    Game_Stt_Egg=0;
     Player.Reload();
 }
 
@@ -119,6 +142,8 @@ void Game_Display() {
     Map_Texture(&Img_Switch);
     Switch_Draw();
     glLoadIdentity();
+    Map_Texture(&Img_Egg[Game_Dest_Gra][Game_Stt_Egg]);
+    Draw_Rect(&Rct_Egg);
     for (int i=0;i<Enemy_Count;i++)
     	Enemy[i]->Draw();
     Game_Display_Func[Game_Stt]();

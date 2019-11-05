@@ -65,9 +65,6 @@ void Menu_Keyboard(unsigned char key, int x, int y) {
             Menu_Active = 0;
             Reload();
             glutDisplayFunc(Game_Display);
-            glutKeyboardFunc(Game_Keyboard);
-            glutSpecialFunc(Game_Special);
-            glutSpecialUpFunc(Game_Special_Up);
         }
     }
 }

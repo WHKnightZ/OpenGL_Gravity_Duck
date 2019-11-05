@@ -53,6 +53,8 @@ void Game_Display_Dead() {
 
 void Game_Display_Pick(){
 	Game_Display_Play();
+	Map_Texture(&Img_Egg_Pick[Game_Stt_Egg_Pick]);
+	Draw_Rect(&Rct_Egg_Pick);
 }
 
 void Game_Process_Begin() {
@@ -69,6 +71,9 @@ void Game_Process_Spawn() {
         if (Player.Stt == 8) {
             Player.Stt = 0;
             Game_Stt = GAME_STT_PLAY;
+            glutKeyboardFunc(Game_Keyboard);
+            glutSpecialFunc(Game_Special);
+            glutSpecialUpFunc(Game_Special_Up);
         }
     }
 }
@@ -103,7 +108,26 @@ void Game_Process_Dead() {
 }
 
 void Game_Process_Pick(){
-	Game_Process_Play();
+    Player.vx += Player.gx;
+    Player.vy += Player.gy;
+    i_vx = (int)Player.vx;
+    i_vy = (int)Player.vy;
+    if (i_vx < 0)
+        Player_Move_Left();
+    else if (i_vx > 0)
+        Player_Move_Right();
+    if (i_vy < 0)
+        Player_Move_Down();
+    else if (i_vy > 0)
+        Player_Move_Up();
+    Game_Time = Loop_Time[Game_Time];
+    if (Game_Time == 0){
+    	Game_Stt_Egg_Pick++;
+    	if (Game_Stt_Egg_Pick==4){
+    		Game_Stt = GAME_STT_WIN;
+        	Player.Stt = 7;
+		}
+	}
 }
 
 void Game_Process_Win() {
@@ -132,17 +156,22 @@ void Collision_Tile_Wall() {}
 
 void Collision_Tile_Nothing() {}
 
-void Collision_Tile_Dest() {
-    if (Player.Gra == Dest_Gra && Game_Stt != GAME_STT_WIN) {
-        Game_Stt = GAME_STT_WIN;
-        Player.Stt = 7;
-    }
-}
-
 void Collision_Tile_Trap() {
     Player.Set_Rct_Dead();
     Game_Stt = GAME_STT_DEAD;
     Player.Alpha = 1.0f;
+}
+
+void Collision_Tile_Dest() {
+    if (Player.Gra == Game_Dest_Gra && Game_Stt != GAME_STT_PICK && Game_Stt != GAME_STT_WIN) {
+    	Game_Stt_Egg=1;
+    	Game_Stt_Egg_Pick=0;
+        Game_Stt = GAME_STT_PICK;
+        Player.vx = Player.vy =0.0f;
+        glutKeyboardFunc(NULL);
+        glutSpecialFunc(NULL);
+        glutSpecialUpFunc(NULL);
+    }
 }
 
 void Init_Array_Func() {
@@ -164,8 +193,8 @@ void Init_Array_Func() {
     Game_Process_Func[GAME_STT_END] = Game_Process_End;
     Collision_Tile_Func[CL_TILE_WALL] = Collision_Tile_Wall;
     Collision_Tile_Func[CL_TILE_NOTHING] = Collision_Tile_Nothing;
-    Collision_Tile_Func[CL_TILE_DEST] = Collision_Tile_Dest;
     Collision_Tile_Func[CL_TILE_TRAP] = Collision_Tile_Trap;
+    Collision_Tile_Func[CL_TILE_DEST] = Collision_Tile_Dest;
 }
 
 void Collision_Tile() {

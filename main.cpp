@@ -79,6 +79,7 @@ void Init_Game() {
     Load_Texture(&Img_Game_BG, "Images/Game_BG.png");
     Load_Texture(&Img_Switch, "Images/Switch.png");
     Load_Texture(&Img_Enemy_Block, "Images/Block.png");
+    Load_Egg();
     Rct_Menu_Main.Left = (WIDTH - Img_Menu_Main.w) / 2;
     Rct_Menu_Main.Bottom = (HEIGHT - Img_Menu_Main.h) / 2;
     Rct_Menu_Main.Right = Rct_Menu_Main.Left + Img_Menu_Main.w;

@@ -45,6 +45,7 @@ enum GAME_STATUS {
     GAME_STT_SPAWN,
     GAME_STT_PLAY,
     GAME_STT_DEAD,
+    GAME_STT_PICK,
     GAME_STT_WIN,
     GAME_STT_END
 };
@@ -145,8 +146,8 @@ int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init;
 float Game_Alpha;
 
 void (*Menu_Display_Func[2])();
-void (*Game_Display_Func[6])();
-void (*Game_Process_Func[6])();
+void (*Game_Display_Func[7])();
+void (*Game_Process_Func[7])();
 void (*Collision_Tile_Func[4])();
 
 void Draw_Rect(Rect *Ptr_Rct);
@@ -172,7 +173,7 @@ Image Img_Menu_Btn_Lvl_Act, Img_Menu_Btn_Lvl_Pas, Img_Menu_Btn_Lvl[BTN_LVL_MAX];
 Image_Data Imgd_Tile[TILE_MAX];
 Image Img_Game_BG, Img_Switch;
 Rect Rct;
-Pos Pos_Menu_Btn[] = {{190, 144}, {190, 66}};
+Pos Pos_Menu_Btn[] = {{190.0f, 144.0f}, {190.0f, 66.0f}};
 
 char Str[40];
 int Map[MAX_Y][MAX_X], Map_Tile[MAX_Y][MAX_X];

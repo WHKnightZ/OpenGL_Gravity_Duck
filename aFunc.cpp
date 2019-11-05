@@ -51,6 +51,10 @@ void Game_Display_Dead() {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void Game_Display_Pick(){
+	Game_Display_Play();
+}
+
 void Game_Process_Begin() {
     Game_Alpha -= 0.05f;
     if (Game_Alpha <= 0.0f) {
@@ -98,6 +102,10 @@ void Game_Process_Dead() {
     }
 }
 
+void Game_Process_Pick(){
+	Game_Process_Play();
+}
+
 void Game_Process_Win() {
     Game_Time = Loop_Time[Game_Time];
     if (Game_Time == 0) {
@@ -121,6 +129,7 @@ void Game_Process_End() {
 }
 
 void Collision_Tile_Wall() {}
+
 void Collision_Tile_Nothing() {}
 
 void Collision_Tile_Dest() {
@@ -143,12 +152,14 @@ void Init_Array_Func() {
     Game_Display_Func[GAME_STT_SPAWN] = Game_Display_Spawn_Win;
     Game_Display_Func[GAME_STT_PLAY] = Game_Display_Play;
     Game_Display_Func[GAME_STT_DEAD] = Game_Display_Dead;
+    Game_Display_Func[GAME_STT_PICK] = Game_Display_Pick;
     Game_Display_Func[GAME_STT_WIN] = Game_Display_Spawn_Win;
     Game_Display_Func[GAME_STT_END] = Game_Display_Begin_End;
     Game_Process_Func[GAME_STT_BEGIN] = Game_Process_Begin;
     Game_Process_Func[GAME_STT_SPAWN] = Game_Process_Spawn;
     Game_Process_Func[GAME_STT_PLAY] = Game_Process_Play;
     Game_Process_Func[GAME_STT_DEAD] = Game_Process_Dead;
+    Game_Process_Func[GAME_STT_PICK] = Game_Process_Pick;
     Game_Process_Func[GAME_STT_WIN] = Game_Process_Win;
     Game_Process_Func[GAME_STT_END] = Game_Process_End;
     Collision_Tile_Func[CL_TILE_WALL] = Collision_Tile_Wall;

@@ -10,6 +10,7 @@ void c_Enemy::Collision() {
     if (Game_Stt == GAME_STT_PLAY && Player.x > Hitbox.Left && Player.x < Hitbox.Right && Player.y > Hitbox.Bottom && Player.y < Hitbox.Top) {
         Player.Set_Rct_Dead();
         Game_Stt = GAME_STT_DEAD;
+        Mix_PlayChannel(-1, Sound_Dead, 0);
         Player.Alpha = 1.0f;
     }
 }

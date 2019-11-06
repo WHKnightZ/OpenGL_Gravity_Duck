@@ -201,6 +201,7 @@ void Collision_Tile_Nothing() {}
 void Collision_Tile_Trap() {
     Player.Set_Rct_Dead();
     Game_Stt = GAME_STT_DEAD;
+    Mix_PlayChannel(-1, Sound_Dead, 0);
     Player.Alpha = 1.0f;
 }
 
@@ -209,6 +210,7 @@ void Collision_Tile_Dest() {
         Game_Stt_Egg = 1;
         Game_Stt_Egg_Pick = 0;
         Game_Stt = GAME_STT_PICK;
+        Mix_PlayChannel(-1, Sound_Pick_Egg, 0);
         Player.vx = Player.vy = 0.0f;
         glutKeyboardFunc(NULL);
         glutSpecialFunc(NULL);

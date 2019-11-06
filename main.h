@@ -1,5 +1,6 @@
 #include "../../Library/loadpng.h"
 #include "../../Library/process_image.h"
+#include <SDL2/SDL_mixer.h>
 #include <GL/glut.h>
 
 #define MAX_X 20
@@ -198,6 +199,7 @@ int Tile_Mapping[] = {CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL
 
 int A, B, C;
 
+#include "sound.cpp"
 #include "cPlayer.cpp"
 #include "cEnemy.cpp"
 #include "cSwitch.cpp"

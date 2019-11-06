@@ -36,6 +36,7 @@ void Switch_Action() {
                 Player.gx = Gra_Offset[Player.Gra].x;
                 Player.gy = Gra_Offset[Player.Gra].y;
                 Player.vx = Player.vy = 0.0f;
+                Mix_PlayChannel(-1, Sound_Touch_Switch, 0);
                 break;
             }
         }

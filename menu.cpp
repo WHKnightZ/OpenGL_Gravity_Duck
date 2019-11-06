@@ -51,26 +51,30 @@ void Set_Rect_Btn_Lvl() {
 
 void Menu_Keyboard(unsigned char key, int x, int y) {
     if (key == 13) {
-        if (Menu_Form_Stt == 0) {
+        switch (Menu_Form_Stt) {
+        case MENU_STT_MAIN:
             if (Menu_Choice == 0) {
-                Menu_Form_Stt = 1;
+                Menu_Form_Stt = MENU_STT_LVL;
                 Menu_Choice = 1;
                 Set_Rect_Btn_Lvl();
             } else {
                 // system("xdg-open https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og"); ubuntu
                 system("start https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og");
             }
-        } else {
+            break;
+        case MENU_STT_LVL:
             Game_Level = Menu_Choice;
             Menu_Active = 0;
             Reload();
             glutDisplayFunc(Game_Display);
+            break;
         }
     }
 }
 
 void Menu_Special(int key, int x, int y) {
-    if (Menu_Form_Stt == 0) {
+    switch (Menu_Form_Stt) {
+    case MENU_STT_MAIN:
         switch (key) {
         case GLUT_KEY_LEFT:
         case GLUT_KEY_RIGHT:
@@ -79,7 +83,8 @@ void Menu_Special(int key, int x, int y) {
             Menu_Choice = 1 - Menu_Choice;
             break;
         }
-    } else {
+        break;
+    case MENU_STT_LVL:
         switch (key) {
         case GLUT_KEY_LEFT:
             Menu_Choice--;
@@ -113,6 +118,7 @@ void Menu_Special(int key, int x, int y) {
             Set_Rect_Btn_Lvl();
             break;
         }
+        break;
     }
 }
 
@@ -125,6 +131,8 @@ void Go_Menu() {
     Menu_Alpha = 1.0f;
     Menu_Alpha_Offset = -0.03f;
     Game_Import = 1;
+    Menu_Go_Alpha = 1.0f;
+    Menu_Form_Stt = MENU_STT_GO;
     glutDisplayFunc(Menu_Display);
     glutKeyboardFunc(Menu_Keyboard);
     glutSpecialFunc(Menu_Special);

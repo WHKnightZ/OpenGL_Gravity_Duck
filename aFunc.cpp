@@ -16,6 +16,48 @@ void Menu_Display_Lvl() {
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
+void Menu_Display_Go() {
+    Menu_Display_Main();
+    glDisable(GL_TEXTURE_2D);
+    glColor4f(0.0f, 0.0f, 0.0f, Menu_Go_Alpha);
+    glBegin(GL_POLYGON);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(WIDTH, 0.0f);
+    glVertex2f(WIDTH, HEIGHT);
+    glVertex2f(0.0f, HEIGHT);
+    glEnd();
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_TEXTURE_2D);
+}
+
+void Menu_Process_Main_Lvl() {
+    Menu_Alpha += Menu_Alpha_Offset;
+    Menu_Stt++;
+    if (Menu_Stt == 15) {
+        Menu_Stt = 0;
+        Menu_Alpha_Offset = -Menu_Alpha_Offset;
+    }
+    Menu_Offset -= 1.0f;
+    if (Menu_Offset <= 0.0f)
+        Menu_Offset += MENU_BG_MAX_OFFSET;
+}
+
+void Menu_Process_Go() {
+    Menu_Alpha += Menu_Alpha_Offset;
+    Menu_Stt++;
+    if (Menu_Stt == 15) {
+        Menu_Stt = 0;
+        Menu_Alpha_Offset = -Menu_Alpha_Offset;
+    }
+    Menu_Offset -= 1.0f;
+    if (Menu_Offset <= 0.0f)
+        Menu_Offset += MENU_BG_MAX_OFFSET;
+    Menu_Go_Alpha -= 0.05f;
+    if (Menu_Go_Alpha <= 0.0f) {
+        Menu_Form_Stt = MENU_STT_MAIN;
+    }
+}
+
 void Game_Display_Begin_End() {
     glDisable(GL_TEXTURE_2D);
     glColor4f(0.0f, 0.0f, 0.0f, Game_Alpha);
@@ -175,8 +217,12 @@ void Collision_Tile_Dest() {
 }
 
 void Init_Array_Func() {
+    Menu_Display_Func[MENU_STT_GO] = Menu_Display_Go;
     Menu_Display_Func[MENU_STT_MAIN] = Menu_Display_Main;
     Menu_Display_Func[MENU_STT_LVL] = Menu_Display_Lvl;
+    Menu_Process_Func[MENU_STT_GO] = Menu_Process_Go;
+    Menu_Process_Func[MENU_STT_MAIN] = Menu_Process_Main_Lvl;
+    Menu_Process_Func[MENU_STT_LVL] = Menu_Process_Main_Lvl;
     Game_Display_Func[GAME_STT_BEGIN] = Game_Display_Begin_End;
     Game_Display_Func[GAME_STT_SPAWN] = Game_Display_Spawn_Win;
     Game_Display_Func[GAME_STT_PLAY] = Game_Display_Play;

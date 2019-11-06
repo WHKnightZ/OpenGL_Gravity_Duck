@@ -36,8 +36,10 @@
 int POS_X, POS_Y;
 
 enum MENU_STATUS {
+    MENU_STT_GO,
     MENU_STT_MAIN,
     MENU_STT_LVL
+
 };
 
 enum GAME_STATUS {
@@ -140,15 +142,15 @@ int Switch_Count_Touch;
 Rect Rct_Switch;
 
 int Menu_Stt, Menu_Time, Menu_Active, Menu_Choice, Menu_Form_Stt, Menu_Max_Lvl;
-float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset;
+float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset, Menu_Go_Alpha;
 Rect Rct_Menu_Main, Rct_Menu_Btn[2], Rct_Menu_Lvl, Rct_Menu_Btn_Lvl;
 int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init, Game_Dest_Gra;
-;
 float Game_Alpha;
 Rect Rct_Egg, Rct_Egg_Pick;
 int Game_Stt_Egg, Game_Stt_Egg_Pick;
 
-void (*Menu_Display_Func[2])();
+void (*Menu_Display_Func[3])();
+void (*Menu_Process_Func[3])();
 void (*Game_Display_Func[7])();
 void (*Game_Process_Func[7])();
 void (*Collision_Tile_Func[4])();

@@ -69,13 +69,13 @@ void Init_Game() {
         sprintf(Str, "Images/Nums/%d.png", i);
         Load_Texture(&Img_Num[i], Str);
     }
-    Load_Texture(&Img_Menu_BG, "Images/Menu_BG.png");
-    Load_Texture(&Img_Menu_Main, "Images/Menu_Main.png");
-    Load_Texture(&Img_Menu_Btn[0], "Images/Btn_Start_Game.png");
-    Load_Texture(&Img_Menu_Btn[1], "Images/Btn_More_Game.png");
-    Load_Texture(&Img_Menu_Lvl, "Images/Menu_Lvl.png");
-    Load_Texture(&Img_Menu_Btn_Lvl_Act, "Images/Btn_Lvl_Act.png");
-    Load_Texture(&Img_Menu_Btn_Lvl_Pas, "Images/Btn_Lvl_Pas.png");
+    Load_Texture(&Img_Menu_BG, "Images/Menu/BG.png");
+    Load_Texture(&Img_Menu_Main, "Images/Menu/Main.png");
+    Load_Texture(&Img_Menu_Btn[0], "Images/Menu/Btn_Start_Game.png");
+    Load_Texture(&Img_Menu_Btn[1], "Images/Menu/Btn_More_Game.png");
+    Load_Texture(&Img_Menu_Lvl, "Images/Menu/Lvl.png");
+    Load_Texture(&Img_Menu_Btn_Lvl_Act, "Images/Menu/Btn_Lvl_Act.png");
+    Load_Texture(&Img_Menu_Btn_Lvl_Pas, "Images/Menu/Btn_Lvl_Pas.png");
     Load_Texture(&Img_Game_BG, "Images/Game_BG.png");
     Load_Texture(&Img_Switch, "Images/Switch.png");
     Load_Texture(&Img_Enemy_Block, "Images/Block.png");
@@ -109,15 +109,7 @@ void Init_Game() {
 
 void Timer(int value) {
     if (Menu_Active) {
-        Menu_Alpha += Menu_Alpha_Offset;
-        Menu_Stt++;
-        if (Menu_Stt == 15) {
-            Menu_Stt = 0;
-            Menu_Alpha_Offset = -Menu_Alpha_Offset;
-        }
-        Menu_Offset -= 1.0f;
-        if (Menu_Offset <= 0.0f)
-            Menu_Offset += MENU_BG_MAX_OFFSET;
+        Menu_Process_Func[Menu_Form_Stt]();
     } else {
         Game_Process_Func[Game_Stt]();
         Switch_Action();

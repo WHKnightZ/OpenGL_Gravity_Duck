@@ -92,7 +92,7 @@ class c_Enemy {
     c_Enemy(int x, int y);
     ~c_Enemy();
     float x, y;
-    int Stt, Drt, Move, Move_Max;
+    int Stt, Gra, Gra_Map, Drt, Move, Move_Max;
     Rect Rct, Hitbox;
     void Collision();
     virtual void Draw() {}
@@ -123,6 +123,20 @@ class c_Enemy_Block_Ver : public c_Enemy {
     void Draw();
     void Action();
 };
+
+class c_Enemy_Worm : public c_Enemy {
+  public:
+    c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Max);
+    ~c_Enemy_Worm() {}
+    float vx, vy;
+    void Draw();
+    void Action();
+};
+
+Image Img_Enemy_Worm[4][2][6];
+int Loop_6[]={1,2,3,4,5,0};
+int Enemy_Worm_W = 32, Enemy_Worm_H = 32;
+float Enemy_Worm_Hitbox_W = 22.0f, Enemy_Worm_Hitbox_H = 22.0f;
 
 class c_Switch {
   public:

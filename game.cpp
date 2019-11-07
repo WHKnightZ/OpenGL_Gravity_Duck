@@ -97,6 +97,10 @@ int Import_Map(int Level) {
             fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
             Enemy[i] = new c_Enemy_Block_Ver(i1, i2, i3, i4, i5);
             break;
+        case 2:
+            fscanf(f, "%d%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5, &i6);
+            Enemy[i] = new c_Enemy_Worm(i1, i2, i3, i4, i5, i6);
+            break;
         }
     }
     int x = dest_x * TILE_SIZE + TILE_SIZE_HALF, y = dest_y * TILE_SIZE + TILE_SIZE_HALF;
@@ -294,8 +298,6 @@ void Init_Game() {
     Load_Texture(&Img_Menu_Btn_Lvl_Pas, "Images/Menu/Btn_Lvl_Pas.png");
     Load_Texture(&Img_Game_BG, "Images/Game_BG.png");
     Load_Texture(&Img_Switch, "Images/Switch.png");
-    Load_Texture(&Img_Enemy_Block, "Images/Block.png");
-    Load_Egg();
     Rct_Menu_Main.Left = (WIDTH - Img_Menu_Main.w) / 2;
     Rct_Menu_Main.Bottom = (HEIGHT - Img_Menu_Main.h) / 2;
     Rct_Menu_Main.Right = Rct_Menu_Main.Left + Img_Menu_Main.w;
@@ -316,12 +318,15 @@ void Init_Game() {
     Rct_Menu_Btn_Lvl.Top = 140;
     Rct_Switch.Bottom = Rct_Switch.Left = -SWITCH_SIZE;
     Rct_Switch.Top = Rct_Switch.Right = SWITCH_SIZE;
+    Load_Egg();
+    Load_Enemy();
     Load_Tile();
     Load_Player();
     Init_Level();
     Init_Sound();
     Menu_Offset = MENU_BG_MAX_OFFSET;
     Game_Init = 0;
+    Go_Menu();
 }
 
 void Timer(int value) {

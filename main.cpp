@@ -14,7 +14,6 @@ int main(int argc, char **argv) {
     glutCreateWindow("Gravity Duck");
     Init_Game();
     glutTimerFunc(0, Timer, 0);
-    Go_Menu();
     glutMainLoop();
     return 0;
 }

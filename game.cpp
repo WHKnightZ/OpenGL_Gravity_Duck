@@ -33,12 +33,30 @@ void Create_List_Draw_Tile() {
 }
 
 void Load_Egg() {
-    Load_Texture(&Img_Egg[2][0], "Images/Egg.png");
-    Load_Texture(&Img_Egg[2][1], "Images/Egg_Null.png");
-    Load_Texture(&Img_Egg_Pick[0], "Images/Egg_Pick_0.png");
-    Load_Texture(&Img_Egg_Pick[1], "Images/Egg_Pick_1.png");
-    Load_Texture(&Img_Egg_Pick[2], "Images/Egg_Pick_2.png");
-    Load_Texture(&Img_Egg_Pick[3], "Images/Egg_Pick_3.png");
+    int Pos[][6] = {
+        {0, 0, 32, 32},
+        {0, 32, 32, 32},
+        {32, 0, 64, 64},
+        {96, 0, 64, 64},
+		{160, 0, 64, 64},
+		{224, 0, 64, 64}};
+    int *Ptr_Pos;
+    Image Img;
+    Image Img_Tmp;
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Egg.png");
+    for (int i = 0; i < 2; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Egg[2][i] = Img_Tmp;
+    }
+    for (int i = 2; i < 6; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Egg_Pick[i-2] = Img_Tmp;
+    }
+    free(Img.img);
     Rotate_Left(&Img_Egg[2][0], &Img_Egg[3][0]);
     Rotate_180(&Img_Egg[2][0], &Img_Egg[0][0]);
     Rotate_180(&Img_Egg[3][0], &Img_Egg[1][0]);
@@ -79,13 +97,13 @@ int Import_Map(int Level) {
         }
     }
     Map[dest_y][dest_x] = CL_TILE_DEST;
+    int i1, i2, i3, i4, i5, i6;
     fscanf(f, "%d", &Switch_Count);
     for (int i = 0; i < Switch_Count; i++) {
-        fscanf(f, "%d%d", &tmp, &tmp2);
-        Switch[i].Set(tmp * TILE_SIZE + TILE_SIZE_HALF, tmp2 * TILE_SIZE + TILE_SIZE_HALF);
+        fscanf(f, "%d%d%d", &i1, &i2, &i3);
+        Switch[i].Set(i1, i2, i3);
     }
     fscanf(f, "%d", &Enemy_Count);
-    int i1, i2, i3, i4, i5, i6;
     for (int i = 0; i < Enemy_Count; i++) {
         fscanf(f, "%d", &tmp);
         switch (tmp) {
@@ -296,8 +314,8 @@ void Init_Game() {
     Load_Texture(&Img_Menu_Lvl, "Images/Menu/Lvl.png");
     Load_Texture(&Img_Menu_Btn_Lvl_Act, "Images/Menu/Btn_Lvl_Act.png");
     Load_Texture(&Img_Menu_Btn_Lvl_Pas, "Images/Menu/Btn_Lvl_Pas.png");
-    Load_Texture(&Img_Game_BG, "Images/Game_BG.png");
-    Load_Texture(&Img_Switch, "Images/Switch.png");
+    Load_Texture(&Img_Game_BG, "Images/Game/BG.png");
+    Load_Texture(&Img_Switch, "Images/Game/Switch.png");
     Rct_Menu_Main.Left = (WIDTH - Img_Menu_Main.w) / 2;
     Rct_Menu_Main.Bottom = (HEIGHT - Img_Menu_Main.h) / 2;
     Rct_Menu_Main.Right = Rct_Menu_Main.Left + Img_Menu_Main.w;
@@ -335,6 +353,7 @@ void Timer(int value) {
     } else {
         Game_Process_Func[Game_Stt]();
         Switch_Action();
+        Enemy_Time = Loop_Time[Enemy_Time];
         for (int i = 0; i < Enemy_Count; i++)
             Enemy[i]->Action();
     }

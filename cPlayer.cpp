@@ -52,7 +52,7 @@ void Load_Player() {
     int *Ptr_Pos;
     Image Img;
     Image Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Player.png");
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Player.png");
     for (int i = 0; i < 6; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
@@ -83,6 +83,6 @@ void Load_Player() {
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 2; j++)
             Img_Player_Stand[i][j] = Img_Player_Spawn[i][j][7];
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Death.png");
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Death.png");
     Img_Player_Death = Img;
 }

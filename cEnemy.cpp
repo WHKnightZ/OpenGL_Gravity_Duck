@@ -53,7 +53,6 @@ void c_Enemy_Block_Hon::Action() {
 }
 
 c_Enemy_Block_Ver::c_Enemy_Block_Ver(int x, int y, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
-	if (Gra_Mapping[Gra] == 0)
     if (Drt == 0)
         vy = -2.0f;
     else
@@ -92,20 +91,21 @@ void c_Enemy_Block_Ver::Action() {
 
 c_Enemy_Worm::c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
 	this->Gra=Gra;
+	this->Drt=Drt;
 	Gra_Map=Gra_Mapping[Gra];
 	if (Gra_Map==0){
 		if (Drt == 0)
-	        vx = -4.0f;
+	        vx = -2.0f;
 	    else
-	        vx = 4.0f;
+	        vx = 2.0f;
 	} else {
 		if (Drt == 0)
-	        vy = -4.0f;
+	        vy = -2.0f;
 	    else
-	        vy = 4.0f;
+	        vy = 2.0f;
 	}
-    this->Move = 8 * Move;
-    this->Move_Max = 8 * Move_Max;
+    this->Move = 16 * Move;
+    this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Worm_W / 2;
     Rct.Right = Rct.Left + Enemy_Worm_W;
     Rct.Bottom = this->y - Enemy_Worm_H / 2;
@@ -117,12 +117,12 @@ c_Enemy_Worm::c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Ma
 }
 
 void c_Enemy_Worm::Draw() {
-    Map_Texture(&Img_Enemy_Worm[2][0][1]);
+    Map_Texture(&Img_Enemy_Worm[Gra][Drt][Stt]);
     Draw_Rect(&Rct);
 }
 
 void c_Enemy_Worm::Action(){
-	if (Game_Time==0) Stt=Loop_6[Stt];
+	if (Enemy_Time==0) Stt=Loop_6[Stt];
 	if (Gra_Map==0){
 		if (Move == Move_Max) {
 	        Move = 0;
@@ -154,7 +154,7 @@ void c_Enemy_Worm::Action(){
 }
 
 void Load_Enemy(){
-	Load_Texture(&Img_Enemy_Block, "Images/Enemys/Block.png");
+	Load_Texture(&Img_Enemy_Block, "Images/Enemies/Block.png");
 	int Pos[][4] = {
         {0, 0, 32, 32},
         {32, 0, 32, 32},
@@ -168,8 +168,7 @@ void Load_Enemy(){
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
         swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
-        Img_Enemy_Worm[2][1][i] = Img_Tmp;
-        printf("%d\n", Img_Enemy_Worm[2][1][0].h);
+        Img_Enemy_Worm[2][0][i] = Img_Tmp;
         Rotate_Left(&Img_Enemy_Worm[2][0][i], &Img_Enemy_Worm[3][1][i]);
         Rotate_180(&Img_Enemy_Worm[2][0][i], &Img_Enemy_Worm[0][1][i]);
         Rotate_180(&Img_Enemy_Worm[3][1][i], &Img_Enemy_Worm[1][0][i]);
@@ -178,6 +177,7 @@ void Load_Enemy(){
         Flip_Horizontal(&Img_Enemy_Worm[2][0][i], &Img_Enemy_Worm[2][1][i]);
         Flip_Vertical(&Img_Enemy_Worm[3][1][i], &Img_Enemy_Worm[3][0][i]);
     }
+    free(Img.img);
     for (int i=4;i<6;i++){
     	for (int j=0;j<4;j++){
     		Img_Enemy_Worm[j][0][i]=Img_Enemy_Worm[j][0][6-i];

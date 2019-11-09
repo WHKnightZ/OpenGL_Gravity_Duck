@@ -144,14 +144,14 @@ class c_Switch {
     ~c_Switch();
     float x, y;
     Rect Hitbox;
-    int Is_Touch;
-    void Set(float x, float y);
+    int Drt, Is_Touch;
+    void Set(float x, float y, int Drt);
 };
 
 c_Switch Switch[SWITCH_MAX];
 c_Switch *Ptr_Switch;
 int Switch_Count;
-float Switch_Angle;
+float Switch_Angle[2];
 int Switch_List_Touch[SWITCH_MAX];
 int Switch_Count_Touch;
 Rect Rct_Switch;
@@ -163,6 +163,7 @@ int Game_Stt, Game_Time, Game_Level, Game_Import, Game_Init, Game_Dest_Gra;
 float Game_Alpha;
 Rect Rct_Egg, Rct_Egg_Pick;
 int Game_Stt_Egg, Game_Stt_Egg_Pick;
+int Enemy_Time;
 
 void (*Menu_Display_Func[3])();
 void (*Menu_Process_Func[3])();
@@ -201,6 +202,7 @@ int Max_X, Max_Y;
 int i_vx, i_vy, x_Map, y_Map;
 int Loop_Time[] = {1, 2, 0}, Loop_Stt[] = {1, 2, 3, 4, 5, 0};
 int Gra_Next[] = {1, 2, 3, 0};
+int Gra_Prev[] = {3, 0, 1, 2};
 int Gra_Reverse[] = {2, 3, 0, 1};
 Pos Gra_Offset[] = {{0, 0.7f}, {0.7f, 0}, {0, -0.7f}, {-0.7f, 0}};
 int Gra_Mapping[] = {0, 1, 0, 1};

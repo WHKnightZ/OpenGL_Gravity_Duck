@@ -119,6 +119,10 @@ int Import_Map(int Level) {
             fscanf(f, "%d%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5, &i6);
             Enemy[i] = new c_Enemy_Worm(i1, i2, i3, i4, i5, i6);
             break;
+        case 3:
+            fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
+            Enemy[i] = new c_Enemy_Shooter(i1, i2, i3, i4, i5);
+            break;
         }
     }
     int x = dest_x * TILE_SIZE + TILE_SIZE_HALF, y = dest_y * TILE_SIZE + TILE_SIZE_HALF;
@@ -174,6 +178,11 @@ void Game_Display() {
     Draw_Rect(&Rct_Egg);
     for (int i = 0; i < Enemy_Count; i++)
         Enemy[i]->Draw();
+    s_List_Bullet *list=List_Bullet;
+    while (list!=NULL){
+    	list->Bullet->Draw();
+    	list=list->next;
+	}
     Game_Display_Func[Game_Stt]();
     glutSwapBuffers();
 }
@@ -353,9 +362,7 @@ void Timer(int value) {
     } else {
         Game_Process_Func[Game_Stt]();
         Switch_Action();
-        Enemy_Time = Loop_Time[Enemy_Time];
-        for (int i = 0; i < Enemy_Count; i++)
-            Enemy[i]->Action();
+        Enemy_Action();
     }
     glutPostRedisplay();
     glutTimerFunc(INTERVAL, Timer, 0);

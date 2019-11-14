@@ -90,7 +90,7 @@ Image Img_Player_Spawn[4][2][8], Img_Player_Run[4][2][6], Img_Player_Stand[4][2]
 class c_Enemy {
   public:
     c_Enemy(int x, int y);
-    ~c_Enemy();
+    ~c_Enemy(){}
     float x, y;
     int Stt, Gra, Gra_Map, Drt, Move, Move_Max;
     Rect Rct, Hitbox;
@@ -137,6 +137,43 @@ Image Img_Enemy_Worm[4][2][6];
 int Loop_6[]={1,2,3,4,5,0};
 int Enemy_Worm_W = 32, Enemy_Worm_H = 32;
 float Enemy_Worm_Hitbox_W = 22.0f, Enemy_Worm_Hitbox_H = 22.0f;
+
+class c_Enemy_Shooter : public c_Enemy {
+  public:
+    c_Enemy_Shooter(int x, int y, int Drt, int Move, int Move_Max);
+    ~c_Enemy_Shooter() {}
+    void Draw();
+    void Action();
+};
+
+Image Img_Enemy_Shooter[2][3];
+int Enemy_Shooter_W = 32, Enemy_Shooter_H = 32;
+float Enemy_Shooter_Hitbox_W = 22.0f, Enemy_Shooter_Hitbox_H = 22.0f;
+
+class c_Bullet {
+  public:
+    c_Bullet(float x, float y, float vx, float vy);
+    ~c_Bullet(){}
+    int Is_Alive;
+    float x, y, vx, vy;
+    Rect Rct, Hitbox;
+    void Collision();
+    virtual void Draw() {}
+    virtual void Action() {}
+};
+
+class c_Bullet_Shooter : public c_Bullet {
+  public:
+    c_Bullet_Shooter(float x, float y, float vx, float vy);
+    ~c_Bullet_Shooter() {}
+    void Draw();
+    void Action();
+};
+
+Image Img_Bullet_Shooter;
+int Bullet_Shooter_W = 8, Bullet_Shooter_H = 8;
+float Bullet_Shooter_Hitbox_W = 14.0f, Bullet_Shooter_Hitbox_H = 14.0f;
+float Bullet_Shooter_Offset[2]={-4.0f,4.0f};
 
 class c_Switch {
   public:
@@ -217,6 +254,7 @@ int A, B, C;
 
 #include "sound.cpp"
 #include "cPlayer.cpp"
+#include "cBullet.cpp"
 #include "cEnemy.cpp"
 #include "cSwitch.cpp"
 #include "aFunc.cpp"

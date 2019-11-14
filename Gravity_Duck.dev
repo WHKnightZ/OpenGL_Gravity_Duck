@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=0000000100000000001000000
-UnitCount=10
+UnitCount=11
 
 [VersionInfo]
 Major=1
@@ -149,4 +149,14 @@ Link=0
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=$(CPP) -c sound.cpp -o sound.o $(CXXFLAGS)
+
+[Unit11]
+FileName=cBullet.cpp
+CompileCpp=1
+Folder=
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=$(CPP) -c cBullet.cpp -o cBullet.o $(CXXFLAGS)
 

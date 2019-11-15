@@ -9,6 +9,8 @@
 #define HEIGHT 480
 #define INTERVAL 25
 
+#define GRAVITY 0.65f
+
 #define MENU_BG_MAX_OFFSET 1280
 
 #define PLAYER_SIZE 16
@@ -90,7 +92,7 @@ Image Img_Player_Spawn[4][2][8], Img_Player_Run[4][2][6], Img_Player_Stand[4][2]
 class c_Enemy {
   public:
     c_Enemy(int x, int y);
-    ~c_Enemy(){}
+    ~c_Enemy() {}
     float x, y;
     int Stt, Gra, Gra_Map, Drt, Move, Move_Max;
     Rect Rct, Hitbox;
@@ -134,9 +136,9 @@ class c_Enemy_Worm : public c_Enemy {
 };
 
 Image Img_Enemy_Worm[4][2][6];
-int Loop_6[]={1,2,3,4,5,0};
+int Loop_6[] = {1, 2, 3, 4, 5, 0};
 int Enemy_Worm_W = 32, Enemy_Worm_H = 32;
-float Enemy_Worm_Hitbox_W = 22.0f, Enemy_Worm_Hitbox_H = 22.0f;
+float Enemy_Worm_Hitbox_W = 20.0f, Enemy_Worm_Hitbox_H = 20.0f;
 
 class c_Enemy_Shooter : public c_Enemy {
   public:
@@ -153,7 +155,7 @@ float Enemy_Shooter_Hitbox_W = 22.0f, Enemy_Shooter_Hitbox_H = 22.0f;
 class c_Bullet {
   public:
     c_Bullet(float x, float y, float vx, float vy);
-    ~c_Bullet(){}
+    ~c_Bullet() {}
     int Is_Alive;
     float x, y, vx, vy;
     Rect Rct, Hitbox;
@@ -164,7 +166,7 @@ class c_Bullet {
 
 class c_Bullet_Shooter : public c_Bullet {
   public:
-    c_Bullet_Shooter(float x, float y, float vx, float vy);
+    c_Bullet_Shooter(float x, float y, float vx);
     ~c_Bullet_Shooter() {}
     void Draw();
     void Action();
@@ -172,8 +174,9 @@ class c_Bullet_Shooter : public c_Bullet {
 
 Image Img_Bullet_Shooter;
 int Bullet_Shooter_W = 8, Bullet_Shooter_H = 8;
-float Bullet_Shooter_Hitbox_W = 14.0f, Bullet_Shooter_Hitbox_H = 14.0f;
-float Bullet_Shooter_Offset[2]={-4.0f,4.0f};
+float Bullet_Shooter_Hitbox_W = 12.0f, Bullet_Shooter_Hitbox_H = 12.0f;
+float Bullet_Shooter_V[2] = {-4.0f, 4.0f};
+float Bullet_Shooter_Offset[2] = {-14.0f, 14.0f};
 
 class c_Switch {
   public:
@@ -241,7 +244,7 @@ int Loop_Time[] = {1, 2, 0}, Loop_Stt[] = {1, 2, 3, 4, 5, 0};
 int Gra_Next[] = {1, 2, 3, 0};
 int Gra_Prev[] = {3, 0, 1, 2};
 int Gra_Reverse[] = {2, 3, 0, 1};
-Pos Gra_Offset[] = {{0, 0.7f}, {0.7f, 0}, {0, -0.7f}, {-0.7f, 0}};
+Pos Gra_Offset[] = {{0, GRAVITY}, {GRAVITY, 0}, {0, -GRAVITY}, {-GRAVITY, 0}};
 int Gra_Mapping[] = {0, 1, 0, 1};
 int Tile_Mapping[] = {CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL,
                       CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL, CL_TILE_WALL,

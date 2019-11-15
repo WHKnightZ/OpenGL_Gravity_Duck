@@ -87,20 +87,20 @@ void c_Enemy_Block_Ver::Action() {
 }
 
 c_Enemy_Worm::c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
-	this->Gra=Gra;
-	this->Drt=Drt;
-	Gra_Map=Gra_Mapping[Gra];
-	if (Gra_Map==0){
-		if (Drt == 0)
-	        vx = -2.0f;
-	    else
-	        vx = 2.0f;
-	} else {
-		if (Drt == 0)
-	        vy = -2.0f;
-	    else
-	        vy = 2.0f;
-	}
+    this->Gra = Gra;
+    this->Drt = Drt;
+    Gra_Map = Gra_Mapping[Gra];
+    if (Gra_Map == 0) {
+        if (Drt == 0)
+            vx = -2.0f;
+        else
+            vx = 2.0f;
+    } else {
+        if (Drt == 0)
+            vy = -2.0f;
+        else
+            vy = 2.0f;
+    }
     this->Move = 16 * Move;
     this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Worm_W / 2;
@@ -118,41 +118,42 @@ void c_Enemy_Worm::Draw() {
     Draw_Rect(&Rct);
 }
 
-void c_Enemy_Worm::Action(){
-	if (Enemy_Time==0) Stt=Loop_6[Stt];
-	if (Gra_Map==0){
-		if (Move == Move_Max) {
-	        Move = 0;
-	        vx = -vx;
-	        Drt=1-Drt;
-	    } else {
-	        Move++;
-	        x += vx;
-	        Rct.Left = x - Enemy_Worm_W / 2;
-	        Rct.Right = Rct.Left + Enemy_Worm_W;
-	        Hitbox.Left = x - Enemy_Worm_Hitbox_W;
-	        Hitbox.Right = x + Enemy_Worm_Hitbox_W;
-	    }
-	} else{
-		if (Move == Move_Max) {
-	        Move = 0;
-	        vy = -vy;
-	        Drt=1-Drt;
-	    } else {
-	        Move++;
-	        y += vy;
-	        Rct.Bottom = y - Enemy_Worm_H / 2;
-	        Rct.Top = Rct.Bottom + Enemy_Worm_H;
-	        Hitbox.Bottom = y - Enemy_Worm_Hitbox_H;
-	        Hitbox.Top = y + Enemy_Worm_Hitbox_H;
-	    }
-	}
-	Collision();
+void c_Enemy_Worm::Action() {
+    if (Enemy_Time == 0)
+        Stt = Loop_6[Stt];
+    if (Gra_Map == 0) {
+        if (Move == Move_Max) {
+            Move = 0;
+            vx = -vx;
+            Drt = 1 - Drt;
+        } else {
+            Move++;
+            x += vx;
+            Rct.Left = x - Enemy_Worm_W / 2;
+            Rct.Right = Rct.Left + Enemy_Worm_W;
+            Hitbox.Left = x - Enemy_Worm_Hitbox_W;
+            Hitbox.Right = x + Enemy_Worm_Hitbox_W;
+        }
+    } else {
+        if (Move == Move_Max) {
+            Move = 0;
+            vy = -vy;
+            Drt = 1 - Drt;
+        } else {
+            Move++;
+            y += vy;
+            Rct.Bottom = y - Enemy_Worm_H / 2;
+            Rct.Top = Rct.Bottom + Enemy_Worm_H;
+            Hitbox.Bottom = y - Enemy_Worm_Hitbox_H;
+            Hitbox.Top = y + Enemy_Worm_Hitbox_H;
+        }
+    }
+    Collision();
 }
 
-c_Enemy_Shooter::c_Enemy_Shooter(int x, int y, int Drt, int Move, int Move_Max):c_Enemy(x,y){
-	Stt=0;
-	this->Drt=Drt;
+c_Enemy_Shooter::c_Enemy_Shooter(int x, int y, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
+    Stt = 0;
+    this->Drt = Drt;
     this->Move = Move;
     this->Move_Max = Move_Max;
     Rct.Left = this->x - Enemy_Shooter_W / 2;
@@ -165,29 +166,29 @@ c_Enemy_Shooter::c_Enemy_Shooter(int x, int y, int Drt, int Move, int Move_Max):
     Hitbox.Top = this->y + Enemy_Shooter_Hitbox_H;
 }
 
-void c_Enemy_Shooter::Draw(){
-	Map_Texture(&Img_Enemy_Shooter[Drt][Stt]);
+void c_Enemy_Shooter::Draw() {
+    Map_Texture(&Img_Enemy_Shooter[Drt][Stt]);
     Draw_Rect(&Rct);
 }
 
-void c_Enemy_Shooter::Action(){
-	if (Move == Move_Max) {
-		if (Enemy_Time==0){
-			Stt++;
-			if (Stt==3){
-				Stt=0;
-				Move=0;
-				List_Bullet_Add(new c_Bullet_Shooter(x-3.0f,y+1.0f,Bullet_Shooter_Offset[Drt],0.0f));
-			}
-		}
+void c_Enemy_Shooter::Action() {
+    if (Move == Move_Max) {
+        if (Enemy_Time == 0) {
+            Stt++;
+            if (Stt == 3) {
+                Stt = 0;
+                Move = 0;
+                List_Bullet_Add(new c_Bullet_Shooter(x + Bullet_Shooter_Offset[Drt], y + 1.0f, Bullet_Shooter_V[Drt]));
+            }
+        }
     } else {
         Move++;
     }
     Collision();
 }
 
-void Load_Enemy_Worm(){
-	int Pos[][4] = {
+void Load_Enemy_Worm() {
+    int Pos[][4] = {
         {0, 0, 32, 32},
         {32, 0, 32, 32},
         {0, 32, 32, 32},
@@ -210,16 +211,16 @@ void Load_Enemy_Worm(){
         Flip_Vertical(&Img_Enemy_Worm[3][1][i], &Img_Enemy_Worm[3][0][i]);
     }
     free(Img.img);
-    for (int i=4;i<6;i++){
-    	for (int j=0;j<4;j++){
-    		Img_Enemy_Worm[j][0][i]=Img_Enemy_Worm[j][0][6-i];
-    		Img_Enemy_Worm[j][1][i]=Img_Enemy_Worm[j][1][6-i];
-		}
-	}
+    for (int i = 4; i < 6; i++) {
+        for (int j = 0; j < 4; j++) {
+            Img_Enemy_Worm[j][0][i] = Img_Enemy_Worm[j][0][6 - i];
+            Img_Enemy_Worm[j][1][i] = Img_Enemy_Worm[j][1][6 - i];
+        }
+    }
 }
 
-void Load_Enemy_Shooter(){
-	int Pos[][4] = {
+void Load_Enemy_Shooter() {
+    int Pos[][4] = {
         {0, 0, 32, 32},
         {32, 0, 32, 32},
         {64, 0, 32, 32},
@@ -242,34 +243,34 @@ void Load_Enemy_Shooter(){
     free(Img.img);
 }
 
-void Load_Enemy(){
-	Load_Texture(&Img_Enemy_Block, "Images/Enemies/Block.png");
-	Load_Enemy_Worm();
-	Load_Enemy_Shooter();
+void Load_Enemy() {
+    Load_Texture(&Img_Enemy_Block, "Images/Enemies/Block.png");
+    Load_Enemy_Worm();
+    Load_Enemy_Shooter();
 }
 
-void Enemy_Action(){
-	Enemy_Time = Loop_Time[Enemy_Time];
+void Enemy_Action() {
+    Enemy_Time = Loop_Time[Enemy_Time];
     for (int i = 0; i < Enemy_Count; i++)
         Enemy[i]->Action();
-    s_List_Bullet *list=List_Bullet, *tmp=NULL;
-    while (list!=NULL){
-    	list->Bullet->Action();
-    	if (!list->Bullet->Is_Alive){
-    		if (tmp!=NULL){
-    			tmp->next=list->next;
-    			delete list->Bullet;
-    			delete list;
-    			list=tmp->next;
-			} else{
-				List_Bullet=list->next;
-				delete list->Bullet;
-				delete list;
-				list=List_Bullet;
-			}
-		} else{
-			tmp=list;
-    		list=list->next;
-		}
-	}
+    s_List_Bullet *list = List_Bullet, *tmp = NULL;
+    while (list != NULL) {
+        list->Bullet->Action();
+        if (!list->Bullet->Is_Alive) {
+            if (tmp != NULL) {
+                tmp->next = list->next;
+                delete list->Bullet;
+                delete list;
+                list = tmp->next;
+            } else {
+                List_Bullet = list->next;
+                delete list->Bullet;
+                delete list;
+                list = List_Bullet;
+            }
+        } else {
+            tmp = list;
+            list = list->next;
+        }
+    }
 }

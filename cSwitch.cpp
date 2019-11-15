@@ -5,7 +5,7 @@ c_Switch::~c_Switch() {
 }
 
 void c_Switch::Set(float x, float y, int Drt) {
-	this->x = x * TILE_SIZE + TILE_SIZE_HALF;
+    this->x = x * TILE_SIZE + TILE_SIZE_HALF;
     this->y = y * TILE_SIZE + TILE_SIZE_HALF;
     this->Drt = Drt;
     Is_Touch = 0;
@@ -34,9 +34,9 @@ void Switch_Action() {
                 Switch_List_Touch[Switch_Count_Touch] = i;
                 Switch_Count_Touch++;
                 if (Ptr_Switch->Drt == 0)
-                	Player.Gra = Gra_Next[Player.Gra];
+                    Player.Gra = Gra_Next[Player.Gra];
                 else
-                	Player.Gra = Gra_Prev[Player.Gra];
+                    Player.Gra = Gra_Prev[Player.Gra];
                 Player.gx = Gra_Offset[Player.Gra].x;
                 Player.gy = Gra_Offset[Player.Gra].y;
                 Player.vx = Player.vy = 0.0f;

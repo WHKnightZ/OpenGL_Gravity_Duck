@@ -38,8 +38,8 @@ void Load_Egg() {
         {0, 32, 32, 32},
         {32, 0, 64, 64},
         {96, 0, 64, 64},
-		{160, 0, 64, 64},
-		{224, 0, 64, 64}};
+        {160, 0, 64, 64},
+        {224, 0, 64, 64}};
     int *Ptr_Pos;
     Image Img;
     Image Img_Tmp;
@@ -54,7 +54,7 @@ void Load_Egg() {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
         swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
-        Img_Egg_Pick[i-2] = Img_Tmp;
+        Img_Egg_Pick[i - 2] = Img_Tmp;
     }
     free(Img.img);
     Rotate_Left(&Img_Egg[2][0], &Img_Egg[3][0]);
@@ -178,11 +178,11 @@ void Game_Display() {
     Draw_Rect(&Rct_Egg);
     for (int i = 0; i < Enemy_Count; i++)
         Enemy[i]->Draw();
-    s_List_Bullet *list=List_Bullet;
-    while (list!=NULL){
-    	list->Bullet->Draw();
-    	list=list->next;
-	}
+    s_List_Bullet *list = List_Bullet;
+    while (list != NULL) {
+        list->Bullet->Draw();
+        list = list->next;
+    }
     Game_Display_Func[Game_Stt]();
     glutSwapBuffers();
 }

@@ -1,9 +1,6 @@
 c_Switch::c_Switch() {
 }
 
-c_Switch::~c_Switch() {
-}
-
 void c_Switch::Set(float x, float y, int Drt) {
     this->x = x * TILE_SIZE + TILE_SIZE_HALF;
     this->y = y * TILE_SIZE + TILE_SIZE_HALF;

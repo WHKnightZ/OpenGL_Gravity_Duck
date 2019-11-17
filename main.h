@@ -1,5 +1,6 @@
 #include "../../Library/loadpng.h"
 #include "../../Library/process_image.h"
+#include <math.h>
 #include <SDL2/SDL_mixer.h>
 #include <GL/glut.h>
 
@@ -10,6 +11,7 @@
 #define INTERVAL 25
 
 #define GRAVITY 0.65f
+#define MAX_VELOCITY 14.0f
 
 #define MENU_BG_MAX_OFFSET 1280
 
@@ -19,7 +21,7 @@
 #define TILE_SIZE_HALF 16
 #define TILE_MAX 44
 
-#define SWITCH_MAX 6
+#define SWITCH_MAX 10
 #define SWITCH_SIZE 20
 
 #define BTN_LVL_START_X 153
@@ -34,7 +36,7 @@
 
 #define HITBOX_SWITCH 10.0f
 
-#define ENEMY_MAX 10
+#define ENEMY_MAX 25
 
 int POS_X, POS_Y;
 
@@ -42,7 +44,6 @@ enum MENU_STATUS {
     MENU_STT_GO,
     MENU_STT_MAIN,
     MENU_STT_LVL
-
 };
 
 enum GAME_STATUS {
@@ -77,7 +78,7 @@ struct Point {
 class c_Player {
   public:
     c_Player();
-    ~c_Player();
+    ~c_Player() {}
     float s_x, s_y, x, y, vx, vy, gx, gy, Alpha;
     int s_Gra, Gra, Drt, Stt, Is_Run, Is_Jump;
     Rect Rct, Rct_Dead;
@@ -88,6 +89,24 @@ class c_Player {
 
 c_Player Player;
 Image Img_Player_Spawn[4][2][8], Img_Player_Run[4][2][6], Img_Player_Stand[4][2], Img_Player_Jump[4][2], Img_Player_Death;
+
+class c_Switch {
+  public:
+    c_Switch();
+    ~c_Switch() {}
+    float x, y;
+    Rect Hitbox;
+    int Drt, Is_Touch;
+    void Set(float x, float y, int Drt);
+};
+
+c_Switch Switch[SWITCH_MAX];
+c_Switch *Ptr_Switch;
+int Switch_Count;
+float Switch_Angle[2];
+int Switch_List_Touch[SWITCH_MAX];
+int Switch_Count_Touch;
+Rect Rct_Switch;
 
 class c_Enemy {
   public:
@@ -136,7 +155,6 @@ class c_Enemy_Worm : public c_Enemy {
 };
 
 Image Img_Enemy_Worm[4][2][6];
-int Loop_6[] = {1, 2, 3, 4, 5, 0};
 int Enemy_Worm_W = 32, Enemy_Worm_H = 32;
 float Enemy_Worm_Hitbox_W = 20.0f, Enemy_Worm_Hitbox_H = 20.0f;
 
@@ -151,6 +169,20 @@ class c_Enemy_Shooter : public c_Enemy {
 Image Img_Enemy_Shooter[2][3];
 int Enemy_Shooter_W = 32, Enemy_Shooter_H = 32;
 float Enemy_Shooter_Hitbox_W = 22.0f, Enemy_Shooter_Hitbox_H = 22.0f;
+
+class c_Enemy_Fly : public c_Enemy {
+  public:
+    c_Enemy_Fly(int x, int y, int Move, int Move_Max);
+    ~c_Enemy_Fly() {}
+    int Stt_Fire;
+    Rect Rct_Fire;
+    void Draw();
+    void Action();
+};
+
+Image Img_Enemy_Fly[2][4], Img_Enemy_Fly_Fire[21];
+int Enemy_Fly_W = 32, Enemy_Fly_H = 32, Enemy_Fly_Fire_W = 64, Enemy_Fly_Fire_H = 64;
+float Enemy_Fly_Hitbox_W = 22.0f, Enemy_Fly_Hitbox_H = 22.0f;
 
 class c_Bullet {
   public:
@@ -175,26 +207,24 @@ class c_Bullet_Shooter : public c_Bullet {
 Image Img_Bullet_Shooter;
 int Bullet_Shooter_W = 8, Bullet_Shooter_H = 8;
 float Bullet_Shooter_Hitbox_W = 12.0f, Bullet_Shooter_Hitbox_H = 12.0f;
-float Bullet_Shooter_V[2] = {-4.0f, 4.0f};
+float Bullet_Shooter_Velocity[2] = {-4.0f, 4.0f};
 float Bullet_Shooter_Offset[2] = {-14.0f, 14.0f};
 
-class c_Switch {
+class c_Bullet_Fly : public c_Bullet {
   public:
-    c_Switch();
-    ~c_Switch();
-    float x, y;
-    Rect Hitbox;
-    int Drt, Is_Touch;
-    void Set(float x, float y, int Drt);
+    c_Bullet_Fly(float x, float y, float vx, float vy, float Angle);
+    ~c_Bullet_Fly() {}
+    int Is_Explode;
+    float Angle, Alpha_Explode;
+    void Draw();
+    void Action();
 };
 
-c_Switch Switch[SWITCH_MAX];
-c_Switch *Ptr_Switch;
-int Switch_Count;
-float Switch_Angle[2];
-int Switch_List_Touch[SWITCH_MAX];
-int Switch_Count_Touch;
-Rect Rct_Switch;
+Rect Rct_Bullet_Fly;
+Image Img_Bullet_Fly, Img_Bullet_Fly_Explode;
+int Bullet_Fly_W = 4, Bullet_Fly_H = 8, Bullet_Fly_Explode_W = 24, Bullet_Fly_Explode_H = 24;
+float Bullet_Fly_Hitbox_W = 12.0f, Bullet_Fly_Hitbox_H = 12.0f;
+float Bullet_Fly_Velocity = 6.0f, Bullet_Fly_Offset = 3.0f;
 
 int Menu_Stt, Menu_Time, Menu_Active, Menu_Choice, Menu_Form_Stt, Menu_Max_Lvl;
 float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset, Menu_Go_Alpha;
@@ -227,6 +257,7 @@ void Game_Display();
 void Game_Keyboard(unsigned char key, int x, int y);
 void Game_Special(int key, int x, int y);
 void Game_Special_Up(int key, int x, int y);
+float Abs(float x);
 
 Image Img_Num[10];
 Image Img_Menu_BG, Img_Menu_Main, Img_Menu_Btn[2], Img_Menu_Lvl;
@@ -236,11 +267,16 @@ Image Img_Game_BG, Img_Switch, Img_Egg[4][2], Img_Egg_Pick[4];
 Rect Rct;
 Pos Pos_Menu_Btn[] = {{190.0f, 144.0f}, {190.0f, 66.0f}};
 
+float Tmp_Dis_X, Tmp_Dis_Y, Tmp_Dis, Tmp_Vx, Tmp_Vy;
 char Str[40];
 int Map[MAX_Y][MAX_X], Map_Tile[MAX_Y][MAX_X];
 int Max_X, Max_Y;
 int i_vx, i_vy, x_Map, y_Map;
+
 int Loop_Time[] = {1, 2, 0}, Loop_Stt[] = {1, 2, 3, 4, 5, 0};
+int Loop_4[] = {1, 2, 3, 0};
+int Loop_6[] = {1, 2, 3, 4, 5, 0};
+
 int Gra_Next[] = {1, 2, 3, 0};
 int Gra_Prev[] = {3, 0, 1, 2};
 int Gra_Reverse[] = {2, 3, 0, 1};
@@ -257,9 +293,9 @@ int A, B, C;
 
 #include "sound.cpp"
 #include "cPlayer.cpp"
+#include "cSwitch.cpp"
 #include "cBullet.cpp"
 #include "cEnemy.cpp"
-#include "cSwitch.cpp"
 #include "aFunc.cpp"
 #include "move.cpp"
 #include "menu.cpp"

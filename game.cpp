@@ -123,6 +123,10 @@ int Import_Map(int Level) {
             fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
             Enemy[i] = new c_Enemy_Shooter(i1, i2, i3, i4, i5);
             break;
+        case 4:
+            fscanf(f, "%d%d%d%d", &i1, &i2, &i3, &i4);
+            Enemy[i] = new c_Enemy_Fly(i1, i2, i3, i4);
+            break;
         }
     }
     int x = dest_x * TILE_SIZE + TILE_SIZE_HALF, y = dest_y * TILE_SIZE + TILE_SIZE_HALF;
@@ -141,6 +145,7 @@ int Import_Map(int Level) {
 
 void Reload() {
     if (Game_Import) {
+        Free_Enemy_Bullet();
         Game_Import = 0;
         if (!Import_Map(Game_Level)) {
             Go_Menu();

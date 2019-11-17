@@ -1,3 +1,7 @@
+float Abs(float x) {
+    return x > 0 ? x : -x;
+}
+
 void Menu_Display_Main() {
     Map_Texture(&Img_Menu_Main);
     Draw_Rect(&Rct_Menu_Main);
@@ -26,7 +30,7 @@ void Menu_Display_Go() {
     glVertex2f(WIDTH, HEIGHT);
     glVertex2f(0.0f, HEIGHT);
     glEnd();
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);
 }
 
@@ -67,7 +71,7 @@ void Game_Display_Begin_End() {
     glVertex2f(WIDTH, HEIGHT);
     glVertex2f(0.0f, HEIGHT);
     glEnd();
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);
 }
 
@@ -90,7 +94,7 @@ void Game_Display_Dead() {
     glColor4f(1.0f, 1.0f, 1.0f, Player.Alpha);
     Map_Texture(&Img_Player_Death);
     Draw_Rect(&Player.Rct_Dead);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
 }
 
 void Game_Display_Pick() {
@@ -124,10 +128,18 @@ void Game_Process_Play() {
     Game_Time = Loop_Time[Game_Time];
     if (Game_Time == 0)
         Player.Stt = Loop_Stt[Player.Stt];
-    Player.vx += Player.gx;
-    Player.vy += Player.gy;
-    i_vx = (int)Player.vx;
-    i_vy = (int)Player.vy;
+    if (Abs(Player.vx) < MAX_VELOCITY)
+        Player.vx += Player.gx;
+    if (Abs(Player.vy) < MAX_VELOCITY)
+        Player.vy += Player.gy;
+    if (Player.vx > 0)
+        i_vx = (int)(Player.vx + 0.5f);
+    else
+        i_vx = (int)(Player.vx - 0.5f);
+    if (Player.vy > 0)
+        i_vy = (int)(Player.vy + 0.5f);
+    else
+        i_vy = (int)(Player.vy - 0.5f);
     Player.Is_Run = Player.Is_Jump = 0;
     if (i_vx < 0)
         Player_Move_Left();
@@ -150,8 +162,10 @@ void Game_Process_Dead() {
 }
 
 void Game_Process_Pick() {
-    Player.vx += Player.gx;
-    Player.vy += Player.gy;
+    if (abs(Player.vx) < MAX_VELOCITY)
+        Player.vx += Player.gx;
+    if (abs(Player.vy) < MAX_VELOCITY)
+        Player.vy += Player.gy;
     i_vx = (int)Player.vx;
     i_vy = (int)Player.vy;
     if (i_vx < 0)

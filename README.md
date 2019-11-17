@@ -4,6 +4,17 @@ Game made by C++ OpenGL
 
 Content:
 ======
+Setup MinGW/G++<br />
+Open main.cpp<br />
+Linker:<br />
+- Window: -lopengl32 -lglu32 -lglut32 -lSDL2 -lSDL2_mixer -mwindows -m32<br />
+- Ubuntu: -lGL -lGLU -lglut -lSDL2 -lSDL2_mixer -lm<br />
+Note:<br />
+-lopengl32, -lglu32, -lglut32 & -lGL, -lGLU, -lglut for OpenGL<br />
+-lSDL2, -lSDL2_mixer for Audio<br />
+-lm for math.h<br />
+-m32 for Win32 bit<br />
+-mwindows for hide Console<br />
 
 Image:
 ------
@@ -19,3 +30,10 @@ Move_Max = Move_Max + 9 = 90 (Stt = 3, Stt Change Every 3 Time (Enemy_Time = 3) 
 But Enemy_1_X (17) > Enemy_2_X (15) = 2 * 32 = 64 (32 Is Size Of Tile)<br />
 Offset_Bullet = 4 => Enemy_1_Latency = 64 / 4 = 16<br />
 => Enemy_1_Move = 45 - 16 = 29<br />
+------
+### Type of Enemy:
+Enemy_Block_Horizontal<br />
+Enemy_Block_Vertical<br />
+Enemy_Worm<br />
+Enemy_Shooter<br />
+Enemy_Fly<br />

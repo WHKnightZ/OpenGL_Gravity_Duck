@@ -1,9 +1,6 @@
 c_Player::c_Player() {
 }
 
-c_Player::~c_Player() {
-}
-
 void c_Player::Import(int x, int y, int Gra) {
     s_x = x;
     s_y = y;

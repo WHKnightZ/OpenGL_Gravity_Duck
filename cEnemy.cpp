@@ -1,4 +1,5 @@
 c_Enemy::c_Enemy(int x, int y) {
+    this->Stt = 0;
     this->x = x * TILE_SIZE + TILE_SIZE_HALF;
     this->y = y * TILE_SIZE + TILE_SIZE_HALF;
 }
@@ -152,7 +153,6 @@ void c_Enemy_Worm::Action() {
 }
 
 c_Enemy_Shooter::c_Enemy_Shooter(int x, int y, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
-    Stt = 0;
     this->Drt = Drt;
     this->Move = Move;
     this->Move_Max = Move_Max;
@@ -178,8 +178,65 @@ void c_Enemy_Shooter::Action() {
             if (Stt == 3) {
                 Stt = 0;
                 Move = 0;
-                List_Bullet_Add(new c_Bullet_Shooter(x + Bullet_Shooter_Offset[Drt], y + 1.0f, Bullet_Shooter_V[Drt]));
+                List_Bullet_Add(new c_Bullet_Shooter(x + Bullet_Shooter_Offset[Drt], y + 1.0f, Bullet_Shooter_Velocity[Drt]));
             }
+        }
+    } else {
+        Move++;
+    }
+    Collision();
+}
+
+c_Enemy_Fly::c_Enemy_Fly(int x, int y, int Move, int Move_Max) : c_Enemy(x, y) {
+    Stt_Fire = 0;
+    this->Move = Move;
+    this->Move_Max = Move_Max;
+    if (Player.x < this->x)
+        Drt = 0;
+    else
+        Drt = 1;
+    Rct.Left = this->x - Enemy_Fly_W / 2;
+    Rct.Right = Rct.Left + Enemy_Fly_W;
+    Rct.Bottom = this->y - Enemy_Fly_H / 2;
+    Rct.Top = Rct.Bottom + Enemy_Fly_H;
+    Rct_Fire.Left = this->x - Enemy_Fly_Fire_W / 2;
+    Rct_Fire.Right = Rct_Fire.Left + Enemy_Fly_Fire_W;
+    Rct_Fire.Bottom = this->y - Enemy_Fly_Fire_H / 2;
+    Rct_Fire.Top = Rct_Fire.Bottom + Enemy_Fly_Fire_H;
+    Hitbox.Left = this->x - Enemy_Fly_Hitbox_W;
+    Hitbox.Right = this->x + Enemy_Fly_Hitbox_W;
+    Hitbox.Bottom = this->y - Enemy_Fly_Hitbox_H;
+    Hitbox.Top = this->y + Enemy_Fly_Hitbox_H;
+}
+
+void c_Enemy_Fly::Draw() {
+    Map_Texture(&Img_Enemy_Fly[Drt][Stt]);
+    Draw_Rect(&Rct);
+    if (Move == Move_Max) {
+        Map_Texture(&Img_Enemy_Fly_Fire[Stt_Fire]);
+        Draw_Rect(&Rct_Fire);
+    }
+}
+
+void c_Enemy_Fly::Action() {
+    if (Player.x < this->x)
+        Drt = 0;
+    else
+        Drt = 1;
+    if (Enemy_Time == 0)
+        Stt = Loop_4[Stt];
+    if (Move == Move_Max) {
+        Stt_Fire++;
+        if (Stt_Fire == 16) {
+            Tmp_Dis_X = Player.x - x;
+            Tmp_Dis_Y = Player.y - y;
+            Tmp_Dis = sqrt(Tmp_Dis_X * Tmp_Dis_X + Tmp_Dis_Y * Tmp_Dis_Y);
+            Tmp_Vx = Tmp_Dis_X / Tmp_Dis;
+            Tmp_Vy = Tmp_Dis_Y / Tmp_Dis;
+            List_Bullet_Add(new c_Bullet_Fly(x + Bullet_Fly_Offset * Tmp_Vx, y + Bullet_Fly_Offset * Tmp_Vy, Bullet_Fly_Velocity * Tmp_Vx, Bullet_Fly_Velocity * Tmp_Vy, atan2(-Tmp_Dis_X, Tmp_Dis_Y) * 57.2958f));
+        } else if (Stt_Fire == 21) {
+            Move = 0;
+            Stt_Fire = 0;
         }
     } else {
         Move++;
@@ -243,10 +300,75 @@ void Load_Enemy_Shooter() {
     free(Img.img);
 }
 
+void Load_Enemy_Fly() {
+    int Pos[][4] = {
+        {0, 0, 32, 32},
+        {32, 0, 32, 32},
+        {0, 32, 32, 32},
+        {32, 32, 32, 32},
+        {64, 0, 64, 64},
+        {128, 0, 64, 64},
+        {192, 0, 64, 64},
+        {256, 0, 64, 64},
+        {0, 64, 64, 64},
+        {64, 64, 64, 64},
+        {128, 64, 64, 64},
+        {192, 64, 64, 64},
+        {256, 64, 64, 64},
+        {320, 0, 4, 8},
+        {320, 8, 24, 24}};
+    int *Ptr_Pos;
+    Image Img;
+    Image Img_Tmp;
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly.png");
+    for (int i = 0; i < 4; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Enemy_Fly[0][i] = Img_Tmp;
+        Flip_Horizontal(&Img_Enemy_Fly[0][i], &Img_Enemy_Fly[1][i]);
+    }
+    for (int i = 0; i < 4; i++) {
+        Ptr_Pos = &Pos[i + 4][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        Img_Enemy_Fly_Fire[i] = Img_Tmp;
+    }
+    Img_Enemy_Fly_Fire[4] = Img_Enemy_Fly_Fire[2];
+    Img_Enemy_Fly_Fire[5] = Img_Enemy_Fly_Fire[1];
+    Img_Enemy_Fly_Fire[6] = Img_Enemy_Fly_Fire[0];
+    Img_Enemy_Fly_Fire[7] = Img_Enemy_Fly_Fire[1];
+    Img_Enemy_Fly_Fire[8] = Img_Enemy_Fly_Fire[2];
+    Img_Enemy_Fly_Fire[9] = Img_Enemy_Fly_Fire[3];
+    Img_Enemy_Fly_Fire[10] = Img_Enemy_Fly_Fire[2];
+    Img_Enemy_Fly_Fire[11] = Img_Enemy_Fly_Fire[1];
+    Img_Enemy_Fly_Fire[12] = Img_Enemy_Fly_Fire[0];
+    Img_Enemy_Fly_Fire[13] = Img_Enemy_Fly_Fire[1];
+    Img_Enemy_Fly_Fire[14] = Img_Enemy_Fly_Fire[2];
+    Img_Enemy_Fly_Fire[15] = Img_Enemy_Fly_Fire[3];
+    for (int i = 0; i < 5; i++) {
+        Ptr_Pos = &Pos[i + 8][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        Img_Enemy_Fly_Fire[i + 16] = Img_Tmp;
+    }
+    Ptr_Pos = &Pos[13][0];
+    Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+    swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+    Img_Bullet_Fly = Img_Tmp;
+    Rct_Bullet_Fly.Left = -Bullet_Fly_W / 2.0f;
+    Rct_Bullet_Fly.Right = Rct_Bullet_Fly.Left + Bullet_Fly_W;
+    Rct_Bullet_Fly.Bottom = -Bullet_Fly_H / 2.0f;
+    Rct_Bullet_Fly.Top = Rct_Bullet_Fly.Bottom + Bullet_Fly_H;
+    Ptr_Pos = &Pos[14][0];
+    Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+    Img_Bullet_Fly_Explode = Img_Tmp;
+    free(Img.img);
+}
+
 void Load_Enemy() {
     Load_Texture(&Img_Enemy_Block, "Images/Enemies/Block.png");
     Load_Enemy_Worm();
     Load_Enemy_Shooter();
+    Load_Enemy_Fly();
 }
 
 void Enemy_Action() {
@@ -259,12 +381,10 @@ void Enemy_Action() {
         if (!list->Bullet->Is_Alive) {
             if (tmp != NULL) {
                 tmp->next = list->next;
-                delete list->Bullet;
                 delete list;
                 list = tmp->next;
             } else {
                 List_Bullet = list->next;
-                delete list->Bullet;
                 delete list;
                 list = List_Bullet;
             }
@@ -272,5 +392,17 @@ void Enemy_Action() {
             tmp = list;
             list = list->next;
         }
+    }
+}
+
+void Free_Enemy_Bullet() {
+    for (int i = 0; i < Enemy_Count; i++)
+        delete Enemy[i];
+    Enemy_Count = 0;
+    s_List_Bullet *list = List_Bullet;
+    while (List_Bullet != NULL) {
+        List_Bullet = List_Bullet->next;
+        delete list;
+        list = List_Bullet;
     }
 }

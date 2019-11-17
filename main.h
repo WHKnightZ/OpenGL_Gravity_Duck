@@ -135,6 +135,7 @@ class c_Enemy_Block_Hon : public c_Enemy {
 Image Img_Enemy_Block;
 int Enemy_Block_W = 32, Enemy_Block_H = 32;
 float Enemy_Block_Hitbox_W = 22.0f, Enemy_Block_Hitbox_H = 22.0f;
+float Enemy_Block_Velocity[2] = {-2.0f, 2.0f};
 
 class c_Enemy_Block_Ver : public c_Enemy {
   public:
@@ -157,6 +158,7 @@ class c_Enemy_Worm : public c_Enemy {
 Image Img_Enemy_Worm[4][2][6];
 int Enemy_Worm_W = 32, Enemy_Worm_H = 32;
 float Enemy_Worm_Hitbox_W = 20.0f, Enemy_Worm_Hitbox_H = 20.0f;
+float Enemy_Worm_Velocity[2] = {-2.0f, 2.0f};
 
 class c_Enemy_Shooter : public c_Enemy {
   public:

@@ -14,10 +14,7 @@ void c_Enemy::Collision() {
 }
 
 c_Enemy_Block_Hon::c_Enemy_Block_Hon(int x, int y, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
-    if (Drt == 0)
-        vx = -2.0f;
-    else
-        vx = 2.0f;
+    vx = Enemy_Block_Velocity[Drt];
     this->Move = 16 * Move;
     this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Block_W / 2;
@@ -51,10 +48,7 @@ void c_Enemy_Block_Hon::Action() {
 }
 
 c_Enemy_Block_Ver::c_Enemy_Block_Ver(int x, int y, int Drt, int Move, int Move_Max) : c_Enemy(x, y) {
-    if (Drt == 0)
-        vy = -2.0f;
-    else
-        vy = 2.0f;
+    vy = Enemy_Block_Velocity[Drt];
     this->Move = 16 * Move;
     this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Block_W / 2;
@@ -91,17 +85,10 @@ c_Enemy_Worm::c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Ma
     this->Gra = Gra;
     this->Drt = Drt;
     Gra_Map = Gra_Mapping[Gra];
-    if (Gra_Map == 0) {
-        if (Drt == 0)
-            vx = -2.0f;
-        else
-            vx = 2.0f;
-    } else {
-        if (Drt == 0)
-            vy = -2.0f;
-        else
-            vy = 2.0f;
-    }
+    if (Gra_Map == 0)
+        vx = Enemy_Worm_Velocity[Drt];
+    else
+    	vy = Enemy_Worm_Velocity[Drt];
     this->Move = 16 * Move;
     this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Worm_W / 2;

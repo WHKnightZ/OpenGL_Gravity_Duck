@@ -7,29 +7,19 @@ void Load_Tile() {
     }
 }
 
-void Create_List_Draw_Tile() {
-    if (!Game_Init)
-        glDeleteLists(1, 1);
-    glNewList(1, GL_COMPILE);
-    Map_Texture(&Img_Game_BG);
-    Rct.Left = 0;
-    Rct.Right = WIDTH;
-    Rct.Bottom = 0;
-    Rct.Top = HEIGHT;
-    Draw_Rect(&Rct);
-    for (int i = 0; i < Max_Y; i++) {
-        for (int j = 0; j < Max_X; j++) {
+void Create_Image_Game_Back() {
+    if (Game_Init)
+        free(Img_Game_Back.img);
+    Clone_Image(&Img_Game_BG, &Img_Game_Back);
+    Image Img;
+    Img.w = Img.h = 32;
+    for (int i = 2; i < MAX_Y_NO_PADDING; i++)
+        for (int j = 2; j < MAX_X_NO_PADDING; j++)
             if (Map_Tile[i][j] > -1) {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TILE_SIZE, TILE_SIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Imgd_Tile[Map_Tile[i][j]]);
-                Rct.Left = j * TILE_SIZE;
-                Rct.Right = Rct.Left + TILE_SIZE;
-                Rct.Bottom = i * TILE_SIZE;
-                Rct.Top = Rct.Bottom + TILE_SIZE;
-                Draw_Rect(&Rct);
+                Img.img = Imgd_Tile[Map_Tile[i][j]];
+                Mix_Image(&Img_Game_Back, &Img, (j - 2) * TILE_SIZE, (i - 2) * TILE_SIZE);
             }
-        }
-    }
-    glEndList();
+    Game_Init = 1;
 }
 
 void Load_Egg() {
@@ -72,24 +62,26 @@ int Import_Map(int Level) {
         return 0;
     int s_x, s_y, s_Gra, dest_x, dest_y;
     fscanf(f, "%d%d%d", &s_x, &s_y, &s_Gra);
-    Player.Import(s_x, s_y, s_Gra);
+    Player.Import(s_x + PADDING_START_X, s_y + PADDING_START_Y, s_Gra);
     fscanf(f, "%d%d%d", &dest_x, &dest_y, &Game_Dest_Gra);
-    Max_X = 20;
-    Max_Y = 15;
-    for (int i = 0; i < Max_Y; i++)
-        for (int j = 0; j < Max_X; j++)
+    dest_x += 2;
+    dest_y += 2;
+    Max_X = MAX_X;
+    Max_Y = MAX_Y;
+    for (int i = 2; i < MAX_Y_NO_PADDING; i++)
+        for (int j = 2; j < MAX_X_NO_PADDING; j++)
             fscanf(f, "%d", &Map_Tile[i][j]);
     int tmp, tmp2;
     int m = Max_Y / 2, n = Max_Y - 1;
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < Max_X; j++) {
+    for (int i = 2; i < m; i++) {
+        for (int j = 2; j < MAX_X_NO_PADDING; j++) {
             tmp = Map_Tile[i][j];
             Map_Tile[i][j] = Map_Tile[n - i][j];
             Map_Tile[n - i][j] = tmp;
         }
     }
-    for (int i = 0; i < Max_Y; i++) {
-        for (int j = 0; j < Max_X; j++) {
+    for (int i = 2; i < MAX_Y_NO_PADDING; i++) {
+        for (int j = 2; j < MAX_X_NO_PADDING; j++) {
             if (Map_Tile[i][j] != -1)
                 Map[i][j] = Tile_Mapping[Map_Tile[i][j]];
             else
@@ -101,7 +93,7 @@ int Import_Map(int Level) {
     fscanf(f, "%d", &Switch_Count);
     for (int i = 0; i < Switch_Count; i++) {
         fscanf(f, "%d%d%d", &i1, &i2, &i3);
-        Switch[i].Set(i1, i2, i3);
+        Switch[i].Set(i1 + 2, i2 + 2, i3);
     }
     fscanf(f, "%d", &Enemy_Count);
     for (int i = 0; i < Enemy_Count; i++) {
@@ -109,23 +101,31 @@ int Import_Map(int Level) {
         switch (tmp) {
         case 0:
             fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
-            Enemy[i] = new c_Enemy_Block_Hon(i1, i2, i3, i4, i5);
+            Enemy[i] = new c_Enemy_Block_Hon(i1 + 2, i2 + 2, i3, i4, i5);
             break;
         case 1:
             fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
-            Enemy[i] = new c_Enemy_Block_Ver(i1, i2, i3, i4, i5);
+            Enemy[i] = new c_Enemy_Block_Ver(i1 + 2, i2 + 2, i3, i4, i5);
             break;
         case 2:
             fscanf(f, "%d%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5, &i6);
-            Enemy[i] = new c_Enemy_Worm(i1, i2, i3, i4, i5, i6);
+            Enemy[i] = new c_Enemy_Worm(i1 + 2, i2 + 2, i3, i4, i5, i6);
             break;
         case 3:
             fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
-            Enemy[i] = new c_Enemy_Shooter(i1, i2, i3, i4, i5);
+            Enemy[i] = new c_Enemy_Shooter(i1 + 2, i2 + 2, i3, i4, i5);
             break;
         case 4:
             fscanf(f, "%d%d%d%d", &i1, &i2, &i3, &i4);
-            Enemy[i] = new c_Enemy_Fly(i1, i2, i3, i4);
+            Enemy[i] = new c_Enemy_Fly(i1 + 2, i2 + 2, i3, i4);
+            break;
+        case 5:
+            fscanf(f, "%d%d%d%d", &i1, &i2, &i3, &i4);
+            Enemy[i] = new c_Enemy_Fly_Chase(i1 + 2, i2 + 2, i3, i4);
+            break;
+        case 6:
+            fscanf(f, "%d%d%d%d%d", &i1, &i2, &i3, &i4, &i5);
+            Enemy[i] = new c_Enemy_Crusher(i1 + 2, i2 + 2, i3, i4, i5);
             break;
         }
     }
@@ -139,7 +139,7 @@ int Import_Map(int Level) {
     Rct_Egg_Pick.Right = Rct_Egg_Pick.Left + Img_Egg_Pick[0].w;
     Rct_Egg_Pick.Top = Rct_Egg_Pick.Bottom + Img_Egg_Pick[0].h;
     fclose(f);
-    Create_List_Draw_Tile();
+    Create_Image_Game_Back();
     return 1;
 }
 
@@ -157,6 +157,7 @@ void Reload() {
     Game_Time = 0;
     Game_Stt_Egg = 0;
     Player.Reload();
+    Switch_Reload();
 }
 
 void Draw_Rect(Rect *Ptr_Rct) {
@@ -175,7 +176,8 @@ void Draw_Rect(Rect *Ptr_Rct) {
 void Game_Display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    glCallList(1);
+    Map_Texture(&Img_Game_Back);
+    Draw_Rect(&Rct_Game_Back);
     Map_Texture(&Img_Switch);
     Switch_Draw();
     glLoadIdentity();
@@ -299,66 +301,6 @@ void Init_Level() {
     free(Img_Menu_Btn_Lvl_Pas.img);
     for (int i = 0; i < 10; i++)
         free(Img_Num[i].img);
-}
-
-void Init_Game() {
-    // GL
-    glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(0, WIDTH, 0, HEIGHT);
-    glViewport(0, 0, WIDTH, HEIGHT);
-    glMatrixMode(GL_MODELVIEW);
-    glClearColor(0.322f, 0.188f, 0.129f, 1.0f);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // Game
-    Init_Array_Func();
-    for (int i = 0; i < 10; i++) {
-        sprintf(Str, "Images/Nums/%d.png", i);
-        Load_Texture(&Img_Num[i], Str);
-    }
-    Load_Texture(&Img_Menu_BG, "Images/Menu/BG.png");
-    Load_Texture(&Img_Menu_Main, "Images/Menu/Main.png");
-    Load_Texture(&Img_Menu_Btn[0], "Images/Menu/Btn_Start_Game.png");
-    Load_Texture(&Img_Menu_Btn[1], "Images/Menu/Btn_More_Game.png");
-    Load_Texture(&Img_Menu_Lvl, "Images/Menu/Lvl.png");
-    Load_Texture(&Img_Menu_Btn_Lvl_Act, "Images/Menu/Btn_Lvl_Act.png");
-    Load_Texture(&Img_Menu_Btn_Lvl_Pas, "Images/Menu/Btn_Lvl_Pas.png");
-    Load_Texture(&Img_Game_BG, "Images/Game/BG.png");
-    Load_Texture(&Img_Switch, "Images/Game/Switch.png");
-    Rct_Menu_Main.Left = (WIDTH - Img_Menu_Main.w) / 2;
-    Rct_Menu_Main.Bottom = (HEIGHT - Img_Menu_Main.h) / 2;
-    Rct_Menu_Main.Right = Rct_Menu_Main.Left + Img_Menu_Main.w;
-    Rct_Menu_Main.Top = Rct_Menu_Main.Bottom + Img_Menu_Main.h;
-    Rct_Menu_Lvl.Left = (WIDTH - Img_Menu_Lvl.w) / 2;
-    Rct_Menu_Lvl.Bottom = (HEIGHT - Img_Menu_Lvl.h) / 2;
-    Rct_Menu_Lvl.Right = Rct_Menu_Lvl.Left + Img_Menu_Lvl.w;
-    Rct_Menu_Lvl.Top = Rct_Menu_Lvl.Bottom + Img_Menu_Lvl.h;
-    for (int i = 0; i < 2; i++) {
-        Rct_Menu_Btn[i].Left = Pos_Menu_Btn[i].x;
-        Rct_Menu_Btn[i].Right = Rct_Menu_Btn[i].Left + Img_Menu_Btn[i].w;
-        Rct_Menu_Btn[i].Bottom = Pos_Menu_Btn[i].y;
-        Rct_Menu_Btn[i].Top = Rct_Menu_Btn[i].Bottom + Img_Menu_Btn[i].h;
-    }
-    Rct_Menu_Btn_Lvl.Left = 100;
-    Rct_Menu_Btn_Lvl.Right = 140;
-    Rct_Menu_Btn_Lvl.Bottom = 100;
-    Rct_Menu_Btn_Lvl.Top = 140;
-    Rct_Switch.Bottom = Rct_Switch.Left = -SWITCH_SIZE;
-    Rct_Switch.Top = Rct_Switch.Right = SWITCH_SIZE;
-    Load_Egg();
-    Load_Enemy();
-    Load_Tile();
-    Load_Player();
-    Init_Level();
-    Init_Sound();
-    Menu_Offset = MENU_BG_MAX_OFFSET;
-    Game_Init = 0;
-    Go_Menu();
 }
 
 void Timer(int value) {

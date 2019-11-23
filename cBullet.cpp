@@ -91,6 +91,64 @@ void c_Bullet_Fly::Action() {
     }
 }
 
+c_Bullet_Fly_Chase::c_Bullet_Fly_Chase(float x, float y, float vx, float vy, float Angle) : c_Bullet_Fly(x, y, vx, vy, Angle) {
+}
+
+void c_Bullet_Fly_Chase::Draw() {
+    if (!Is_Explode) {
+        glTranslatef((int)x, (int)y, 0.0f);
+        glRotatef(Angle, 0.0f, 0.0f, 1.0f);
+        Map_Texture(&Img_Bullet_Fly_Chase);
+        Draw_Rect(&Rct_Bullet_Fly);
+        glLoadIdentity();
+    } else {
+        glColor4f(1.0f, 1.0f, 1.0f, Alpha_Explode);
+        Map_Texture(&Img_Bullet_Fly_Explode);
+        Draw_Rect(&Rct);
+        glColor3f(1.0f, 1.0f, 1.0f);
+    }
+}
+
+void c_Bullet_Fly_Chase::Action() {
+    Is_Alive = 1;
+    if (!Is_Explode) {
+        Tmp_Angle = atan2(x - Player.x, Player.y - y) * RADIAN;
+        Tmp_Angle2 = Tmp_Angle - Angle;
+        if (Tmp_Angle2 < 0)
+            Tmp_Angle2 += 360.0f;
+        if (Tmp_Angle2 > 180.0f) {
+            Offset_Angle = -BULLET_FLY_CHASE_OFFSET;
+            Tmp_Angle2 = 360.0f - Tmp_Angle2;
+        } else
+            Offset_Angle = BULLET_FLY_CHASE_OFFSET;
+        if (Tmp_Angle2 < BULLET_FLY_CHASE_OFFSET)
+            Angle = Tmp_Angle;
+        else
+            Angle += Offset_Angle;
+        vx = -Bullet_Fly_Velocity * sin(Angle / RADIAN);
+        vy = Bullet_Fly_Velocity * cos(Angle / RADIAN);
+        x += vx;
+        y += vy;
+        Hitbox.Left = x - Bullet_Fly_Hitbox_W;
+        Hitbox.Right = x + Bullet_Fly_Hitbox_W;
+        Hitbox.Bottom = y - Bullet_Fly_Hitbox_H;
+        Hitbox.Top = y + Bullet_Fly_Hitbox_H;
+        Collision();
+        if (Map[(int)y / TILE_SIZE][(int)x / TILE_SIZE] == CL_TILE_WALL) {
+            Is_Explode = 1;
+            Alpha_Explode = 1.0f;
+            Rct.Left = (int)x - Bullet_Fly_Explode_W / 2.0f;
+            Rct.Right = Rct.Left + Bullet_Fly_Explode_W;
+            Rct.Bottom = (int)y - Bullet_Fly_Explode_H / 2.0f;
+            Rct.Top = Rct.Bottom + Bullet_Fly_Explode_H;
+        }
+    } else {
+        Alpha_Explode -= 0.05f;
+        if (Alpha_Explode <= 0.0f)
+            Is_Alive = 0;
+    }
+}
+
 struct s_List_Bullet {
     c_Bullet *Bullet;
     s_List_Bullet *next;

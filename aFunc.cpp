@@ -66,10 +66,10 @@ void Game_Display_Begin_End() {
     glDisable(GL_TEXTURE_2D);
     glColor4f(0.0f, 0.0f, 0.0f, Game_Alpha);
     glBegin(GL_POLYGON);
-    glVertex2f(0.0f, 0.0f);
-    glVertex2f(WIDTH, 0.0f);
-    glVertex2f(WIDTH, HEIGHT);
-    glVertex2f(0.0f, HEIGHT);
+    glVertex2f(PADDING_START_X, PADDING_START_Y);
+    glVertex2f(PADDING_FULL_X, PADDING_START_Y);
+    glVertex2f(PADDING_FULL_X, PADDING_FULL_Y);
+    glVertex2f(PADDING_START_X, PADDING_FULL_Y);
     glEnd();
     glColor3f(1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);

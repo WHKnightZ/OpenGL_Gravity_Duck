@@ -88,7 +88,7 @@ c_Enemy_Worm::c_Enemy_Worm(int x, int y, int Gra, int Drt, int Move, int Move_Ma
     if (Gra_Map == 0)
         vx = Enemy_Worm_Velocity[Drt];
     else
-    	vy = Enemy_Worm_Velocity[Drt];
+        vy = Enemy_Worm_Velocity[Drt];
     this->Move = 16 * Move;
     this->Move_Max = 16 * Move_Max;
     Rct.Left = this->x - Enemy_Worm_W / 2;
@@ -220,10 +220,116 @@ void c_Enemy_Fly::Action() {
             Tmp_Dis = sqrt(Tmp_Dis_X * Tmp_Dis_X + Tmp_Dis_Y * Tmp_Dis_Y);
             Tmp_Vx = Tmp_Dis_X / Tmp_Dis;
             Tmp_Vy = Tmp_Dis_Y / Tmp_Dis;
-            List_Bullet_Add(new c_Bullet_Fly(x + Bullet_Fly_Offset * Tmp_Vx, y + Bullet_Fly_Offset * Tmp_Vy, Bullet_Fly_Velocity * Tmp_Vx, Bullet_Fly_Velocity * Tmp_Vy, atan2(-Tmp_Dis_X, Tmp_Dis_Y) * 57.2958f));
+            List_Bullet_Add(new c_Bullet_Fly(x + Bullet_Fly_Offset * Tmp_Vx, y + Bullet_Fly_Offset * Tmp_Vy, Bullet_Fly_Velocity * Tmp_Vx, Bullet_Fly_Velocity * Tmp_Vy, atan2(-Tmp_Dis_X, Tmp_Dis_Y) * RADIAN));
         } else if (Stt_Fire == 21) {
             Move = 0;
             Stt_Fire = 0;
+        }
+    } else {
+        Move++;
+    }
+    Collision();
+}
+
+c_Enemy_Fly_Chase::c_Enemy_Fly_Chase(int x, int y, int Move, int Move_Max) : c_Enemy_Fly(x, y, Move, Move_Max) {
+}
+
+void c_Enemy_Fly_Chase::Draw() {
+    Map_Texture(&Img_Enemy_Fly_Chase[Drt][Stt]);
+    Draw_Rect(&Rct);
+    if (Move == Move_Max) {
+        Map_Texture(&Img_Enemy_Fly_Fire[Stt_Fire]);
+        Draw_Rect(&Rct_Fire);
+    }
+}
+
+void c_Enemy_Fly_Chase::Action() {
+    if (Player.x < this->x)
+        Drt = 0;
+    else
+        Drt = 1;
+    if (Enemy_Time == 0)
+        Stt = Loop_4[Stt];
+    if (Move == Move_Max) {
+        Stt_Fire++;
+        if (Stt_Fire == 16) {
+            Tmp_Dis_X = Player.x - x;
+            Tmp_Dis_Y = Player.y - y;
+            Tmp_Dis = sqrt(Tmp_Dis_X * Tmp_Dis_X + Tmp_Dis_Y * Tmp_Dis_Y);
+            Tmp_Vx = Tmp_Dis_X / Tmp_Dis;
+            Tmp_Vy = Tmp_Dis_Y / Tmp_Dis;
+            List_Bullet_Add(new c_Bullet_Fly_Chase(x + Bullet_Fly_Offset * Tmp_Vx, y + Bullet_Fly_Offset * Tmp_Vy, Bullet_Fly_Velocity * Tmp_Vx, Bullet_Fly_Velocity * Tmp_Vy, atan2(-Tmp_Dis_X, Tmp_Dis_Y) * RADIAN));
+        } else if (Stt_Fire == 21) {
+            Move = 0;
+            Stt_Fire = 0;
+        }
+    } else {
+        Move++;
+    }
+    Collision();
+}
+
+c_Enemy_Crusher::c_Enemy_Crusher(int x, int y, int Gra, int Move, int Move_Max) : c_Enemy(x, y) {
+    this->Gra = Gra;
+    this->Move = Move;
+    this->Move_Max = Move_Max;
+    switch (Gra) {
+    case 0:
+        Rct.Left = this->x - 16.0f;
+        Rct.Right = Rct.Left + 32.0f;
+        Rct.Top = this->y + 16.0f;
+        Rct.Bottom = Rct.Top - 64.0f;
+        break;
+    case 1:
+        Rct.Bottom = this->y - 16.0f;
+        Rct.Top = Rct.Bottom + 32.0f;
+        Rct.Right = this->x + 16.0f;
+        Rct.Left = Rct.Right - 64.0f;
+        break;
+    case 2:
+        Rct.Left = this->x - 16.0f;
+        Rct.Right = Rct.Left + 32.0f;
+        Rct.Bottom = this->y - 16.0f;
+        Rct.Top = Rct.Bottom + 64.0f;
+        break;
+    case 3:
+        Rct.Bottom = this->y - 16.0f;
+        Rct.Top = Rct.Bottom + 32.0f;
+        Rct.Left = this->x - 16.0f;
+        Rct.Right = Rct.Left + 64.0f;
+        break;
+    }
+    Hitbox.Left = this->x - Enemy_Block_Hitbox_W;
+    Hitbox.Right = this->x + Enemy_Block_Hitbox_W;
+    Hitbox.Bottom = this->y - Enemy_Block_Hitbox_H;
+    Hitbox.Top = this->y + Enemy_Block_Hitbox_H;
+}
+
+void c_Enemy_Crusher::Draw() {
+    Map_Texture(&Img_Enemy_Crusher[Gra][Stt]);
+    Draw_Rect(&Rct);
+}
+
+void c_Enemy_Crusher::Action() {
+    if (Move == Move_Max) {
+        Stt++;
+        if (Stt == 13) {
+            Stt = 0;
+            Move = 0;
+        }
+        switch (Gra) {
+        case 0:
+            Hitbox.Bottom = Hitbox.Top - Enemy_Crusher_Offset_Hitbox[Stt];
+            break;
+        case 1:
+            Hitbox.Left = Hitbox.Right - Enemy_Crusher_Offset_Hitbox[Stt];
+            break;
+        case 2:
+            Hitbox.Top = Hitbox.Bottom + Enemy_Crusher_Offset_Hitbox[Stt];
+            break;
+        case 3:
+            Hitbox.Right = Hitbox.Left + Enemy_Crusher_Offset_Hitbox[Stt];
+            break;
         }
     } else {
         Move++;
@@ -238,8 +344,7 @@ void Load_Enemy_Worm() {
         {0, 32, 32, 32},
         {32, 32, 32, 32}};
     int *Ptr_Pos;
-    Image Img;
-    Image Img_Tmp;
+    Image Img, Img_Tmp;
     loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Worm.png");
     for (int i = 0; i < 4; i++) {
         Ptr_Pos = &Pos[i][0];
@@ -270,8 +375,7 @@ void Load_Enemy_Shooter() {
         {64, 0, 32, 32},
         {96, 0, 8, 8}};
     int *Ptr_Pos;
-    Image Img;
-    Image Img_Tmp;
+    Image Img, Img_Tmp;
     loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Shooter.png");
     for (int i = 0; i < 3; i++) {
         Ptr_Pos = &Pos[i][0];
@@ -305,8 +409,7 @@ void Load_Enemy_Fly() {
         {320, 0, 4, 8},
         {320, 8, 24, 24}};
     int *Ptr_Pos;
-    Image Img;
-    Image Img_Tmp;
+    Image Img, Img_Tmp;
     loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly.png");
     for (int i = 0; i < 4; i++) {
         Ptr_Pos = &Pos[i][0];
@@ -351,11 +454,73 @@ void Load_Enemy_Fly() {
     free(Img.img);
 }
 
+void Load_Enemy_Fly_Chase() {
+    int Pos[][4] = {
+        {0, 0, 32, 32},
+        {32, 0, 32, 32},
+        {0, 32, 32, 32},
+        {32, 32, 32, 32},
+        {64, 0, 4, 8}};
+    int *Ptr_Pos;
+    Image Img, Img_Tmp;
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly_Chase.png");
+    for (int i = 0; i < 4; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Enemy_Fly_Chase[0][i] = Img_Tmp;
+        Flip_Horizontal(&Img_Enemy_Fly_Chase[0][i], &Img_Enemy_Fly_Chase[1][i]);
+    }
+    Ptr_Pos = &Pos[4][0];
+    Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+    swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+    Img_Bullet_Fly_Chase = Img_Tmp;
+    free(Img.img);
+}
+
+void Load_Enemy_Crusher() {
+    int Pos[][4] = {
+        {0, 0, 32, 64},
+        {32, 0, 32, 64},
+        {64, 0, 32, 64},
+        {96, 0, 32, 64},
+        {128, 0, 32, 64},
+        {160, 0, 32, 64}};
+    int *Ptr_Pos;
+    Image Img, Img_Tmp, Img_Base[4][6];
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Crusher.png");
+    for (int i = 0; i < 6; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Base[2][i] = Img_Tmp;
+        Rotate_Left(&Img_Base[2][i], &Img_Base[3][i]);
+        Rotate_180(&Img_Base[2][i], &Img_Base[0][i]);
+        Rotate_180(&Img_Base[3][i], &Img_Base[1][i]);
+    }
+    for (int i = 0; i < 4; i++) {
+        Img_Enemy_Crusher[i][0] = Img_Base[i][0];
+        Img_Enemy_Crusher[i][1] = Img_Base[i][2];
+        Img_Enemy_Crusher[i][2] = Img_Base[i][5];
+    }
+    Enemy_Crusher_Offset_Hitbox[0] = Enemy_Crusher_Offset_Hitbox_Base[0];
+    Enemy_Crusher_Offset_Hitbox[1] = Enemy_Crusher_Offset_Hitbox_Base[2];
+    Enemy_Crusher_Offset_Hitbox[2] = Enemy_Crusher_Offset_Hitbox_Base[5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 4; j++)
+            Img_Enemy_Crusher[j][i * 2 + 3] = Img_Enemy_Crusher[j][i * 2 + 4] = Img_Base[j][5 - i];
+        Enemy_Crusher_Offset_Hitbox[i * 2 + 3] = Enemy_Crusher_Offset_Hitbox[i * 2 + 4] = Enemy_Crusher_Offset_Hitbox_Base[5 - i];
+    }
+    free(Img.img);
+}
+
 void Load_Enemy() {
     Load_Texture(&Img_Enemy_Block, "Images/Enemies/Block.png");
     Load_Enemy_Worm();
     Load_Enemy_Shooter();
     Load_Enemy_Fly();
+    Load_Enemy_Fly_Chase();
+    Load_Enemy_Crusher();
 }
 
 void Enemy_Action() {

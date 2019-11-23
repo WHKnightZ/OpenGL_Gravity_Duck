@@ -47,8 +47,7 @@ void Load_Player() {
         {160, 32, 32, 32},
         {192, 32, 32, 32}};
     int *Ptr_Pos;
-    Image Img;
-    Image Img_Tmp;
+    Image Img, Img_Tmp;
     loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Player.png");
     for (int i = 0; i < 6; i++) {
         Ptr_Pos = &Pos[i][0];

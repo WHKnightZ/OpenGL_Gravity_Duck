@@ -6,10 +6,6 @@ void c_Switch::Set(float x, float y, int Drt) {
     this->y = y * TILE_SIZE + TILE_SIZE_HALF;
     this->Drt = Drt;
     Is_Touch = 0;
-    Hitbox.Left = this->x - HITBOX_SWITCH;
-    Hitbox.Right = this->x + HITBOX_SWITCH;
-    Hitbox.Bottom = this->y - HITBOX_SWITCH;
-    Hitbox.Top = this->y + HITBOX_SWITCH;
 }
 
 void Switch_Draw() {
@@ -34,6 +30,7 @@ void Switch_Action() {
                     Player.Gra = Gra_Next[Player.Gra];
                 else
                     Player.Gra = Gra_Prev[Player.Gra];
+                Switch_Reload();
                 Player.gx = Gra_Offset[Player.Gra].x;
                 Player.gy = Gra_Offset[Player.Gra].y;
                 Player.vx = Player.vy = 0.0f;
@@ -50,4 +47,14 @@ void Switch_Reset_Touch() {
     for (int i = 0; i < Switch_Count_Touch; i++)
         Switch[Switch_List_Touch[i]].Is_Touch = 0;
     Switch_Count_Touch = 0;
+}
+
+void Switch_Reload() {
+    for (int i = 0; i < Switch_Count; i++) {
+        Ptr_Rct = &Switch[i].Hitbox;
+        Ptr_Rct->Left = Switch[i].x - Switch_Hitbox_H[Player.Gra];
+        Ptr_Rct->Right = Switch[i].x + Switch_Hitbox_H[Player.Gra];
+        Ptr_Rct->Bottom = Switch[i].y - Switch_Hitbox_V[Player.Gra];
+        Ptr_Rct->Top = Switch[i].y + Switch_Hitbox_V[Player.Gra];
+    }
 }

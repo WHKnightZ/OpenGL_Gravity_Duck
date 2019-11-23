@@ -99,7 +99,7 @@ void c_Bullet_Fly_Chase::Draw() {
         glTranslatef((int)x, (int)y, 0.0f);
         glRotatef(Angle, 0.0f, 0.0f, 1.0f);
         Map_Texture(&Img_Bullet_Fly_Chase);
-        Draw_Rect(&Rct_Bullet_Fly);
+        Draw_Rect(&Rct_Bullet_Fly_Chase);
         glLoadIdentity();
     } else {
         glColor4f(1.0f, 1.0f, 1.0f, Alpha_Explode);

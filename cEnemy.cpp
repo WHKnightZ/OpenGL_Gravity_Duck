@@ -460,7 +460,7 @@ void Load_Enemy_Fly_Chase() {
         {32, 0, 32, 32},
         {0, 32, 32, 32},
         {32, 32, 32, 32},
-        {64, 0, 4, 8}};
+        {64, 0, 8, 12}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
     loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly_Chase.png");
@@ -475,6 +475,10 @@ void Load_Enemy_Fly_Chase() {
     Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
     swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
     Img_Bullet_Fly_Chase = Img_Tmp;
+    Rct_Bullet_Fly_Chase.Left = -Bullet_Fly_Chase_W / 2.0f;
+    Rct_Bullet_Fly_Chase.Right = Rct_Bullet_Fly_Chase.Left + Bullet_Fly_Chase_W;
+    Rct_Bullet_Fly_Chase.Bottom = -Bullet_Fly_Chase_H / 2.0f;
+    Rct_Bullet_Fly_Chase.Top = Rct_Bullet_Fly_Chase.Bottom + Bullet_Fly_Chase_H;
     free(Img.img);
 }
 

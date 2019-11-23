@@ -264,7 +264,9 @@ class c_Bullet_Fly_Chase : public c_Bullet_Fly {
     void Action();
 };
 
+Rect Rct_Bullet_Fly_Chase;
 Image Img_Bullet_Fly_Chase;
+int Bullet_Fly_Chase_W = 6, Bullet_Fly_Chase_H = 12;
 
 int Menu_Stt, Menu_Time, Menu_Active, Menu_Choice, Menu_Form_Stt, Menu_Max_Lvl;
 float Menu_Offset, Menu_Alpha, Menu_Alpha_Offset, Menu_Go_Alpha;

@@ -19,7 +19,7 @@ void Reload_Matrix_Game() {
     glLoadIdentity();
     gluOrtho2D(0, WIDTH, 0, HEIGHT);
     glViewport(0, 0, WIDTH, HEIGHT);
-    glTranslatef(-64.0f, -64.0f, 0.0f);
+    glTranslatef(-PADDING_START_X, -PADDING_START_Y, 0.0f);
     glMatrixMode(GL_MODELVIEW);
 }
 

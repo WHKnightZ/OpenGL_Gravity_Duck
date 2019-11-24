@@ -3,7 +3,7 @@
 Game made by C++ OpenGL
 
 ### Content:
-
+======
 Setup:<br />
 - Setup MinGW/G++<br />
 - Open main.cpp or Gravity_Duck.dev if you have Dev C++<br />

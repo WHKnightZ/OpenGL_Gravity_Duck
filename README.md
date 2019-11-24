@@ -10,6 +10,7 @@ Linker:<br />
 - Window: -lopengl32 -lglu32 -lglut32 -lSDL2 -lSDL2_mixer -mwindows -m32<br />
 - Ubuntu: -lGL -lGLU -lglut -lSDL2 -lSDL2_mixer -lm<br />
 Note:<br />
+Only build main.cpp<br />
 -lopengl32, -lglu32, -lglut32 & -lGL, -lGLU, -lglut for OpenGL<br />
 -lSDL2, -lSDL2_mixer for Audio<br />
 -lm for math.h<br />

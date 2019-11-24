@@ -345,11 +345,11 @@ void Load_Enemy_Worm() {
         {32, 32, 32, 32}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Worm.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Enemies/Worm.png");
     for (int i = 0; i < 4; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Enemy_Worm[2][0][i] = Img_Tmp;
         Rotate_Left(&Img_Enemy_Worm[2][0][i], &Img_Enemy_Worm[3][1][i]);
         Rotate_180(&Img_Enemy_Worm[2][0][i], &Img_Enemy_Worm[0][1][i]);
@@ -376,17 +376,17 @@ void Load_Enemy_Shooter() {
         {96, 0, 8, 8}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Shooter.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Enemies/Shooter.png");
     for (int i = 0; i < 3; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Enemy_Shooter[0][i] = Img_Tmp;
         Flip_Horizontal(&Img_Enemy_Shooter[0][i], &Img_Enemy_Shooter[1][i]);
     }
     Ptr_Pos = &Pos[3][0];
     Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-    swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+    Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
     Img_Bullet_Shooter = Img_Tmp;
     free(Img.img);
 }
@@ -410,11 +410,11 @@ void Load_Enemy_Fly() {
         {320, 8, 24, 24}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly.png");
     for (int i = 0; i < 4; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Enemy_Fly[0][i] = Img_Tmp;
         Flip_Horizontal(&Img_Enemy_Fly[0][i], &Img_Enemy_Fly[1][i]);
     }
@@ -442,7 +442,7 @@ void Load_Enemy_Fly() {
     }
     Ptr_Pos = &Pos[13][0];
     Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-    swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+    Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
     Img_Bullet_Fly = Img_Tmp;
     Rct_Bullet_Fly.Left = -Bullet_Fly_W / 2.0f;
     Rct_Bullet_Fly.Right = Rct_Bullet_Fly.Left + Bullet_Fly_W;
@@ -463,17 +463,17 @@ void Load_Enemy_Fly_Chase() {
         {64, 0, 8, 12}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly_Chase.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Enemies/Fly_Chase.png");
     for (int i = 0; i < 4; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Enemy_Fly_Chase[0][i] = Img_Tmp;
         Flip_Horizontal(&Img_Enemy_Fly_Chase[0][i], &Img_Enemy_Fly_Chase[1][i]);
     }
     Ptr_Pos = &Pos[4][0];
     Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-    swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+    Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
     Img_Bullet_Fly_Chase = Img_Tmp;
     Rct_Bullet_Fly_Chase.Left = -Bullet_Fly_Chase_W / 2.0f;
     Rct_Bullet_Fly_Chase.Right = Rct_Bullet_Fly_Chase.Left + Bullet_Fly_Chase_W;
@@ -492,11 +492,11 @@ void Load_Enemy_Crusher() {
         {160, 0, 32, 64}};
     int *Ptr_Pos;
     Image Img, Img_Tmp, Img_Base[4][6];
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Enemies/Crusher.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Enemies/Crusher.png");
     for (int i = 0; i < 6; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Base[2][i] = Img_Tmp;
         Rotate_Left(&Img_Base[2][i], &Img_Base[3][i]);
         Rotate_180(&Img_Base[2][i], &Img_Base[0][i]);

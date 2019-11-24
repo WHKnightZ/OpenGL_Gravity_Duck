@@ -48,11 +48,11 @@ void Load_Player() {
         {192, 32, 32, 32}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Player.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Game/Player.png");
     for (int i = 0; i < 6; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Player_Run[2][1][i] = Img_Tmp;
         Rotate_Left(&Img_Player_Run[2][1][i], &Img_Player_Run[3][0][i]);
         Rotate_180(&Img_Player_Run[2][1][i], &Img_Player_Run[0][0][i]);
@@ -65,7 +65,7 @@ void Load_Player() {
     for (int i = 0; i < 8; i++) {
         Ptr_Pos = &Pos[i + 6][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Player_Spawn[2][1][i] = Img_Tmp;
         Rotate_Left(&Img_Player_Spawn[2][1][i], &Img_Player_Spawn[3][0][i]);
         Rotate_180(&Img_Player_Spawn[2][1][i], &Img_Player_Spawn[0][0][i]);
@@ -79,6 +79,6 @@ void Load_Player() {
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 2; j++)
             Img_Player_Stand[i][j] = Img_Player_Spawn[i][j][7];
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Death.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Game/Death.png");
     Img_Player_Death = Img;
 }

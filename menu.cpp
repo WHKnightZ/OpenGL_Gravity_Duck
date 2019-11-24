@@ -1,3 +1,11 @@
+void Load_Texture(Image *img, const char *path) {
+    Load_Png_Swap(&img->img, &img->w, &img->h, path);
+}
+
+void Map_Texture(Image *img) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img->w, img->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img->img);
+}
+
 void Reload_Matrix_Menu() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -29,11 +37,11 @@ void Load_Num() {
         {67, 0, 8, 8}};
     int *Ptr_Pos;
     Image Img, Img_Tmp;
-    loadPng(&Img.img, &Img.w, &Img.h, "Images/Menu/Nums.png");
+    Load_Png(&Img.img, &Img.w, &Img.h, "Images/Menu/Nums.png");
     for (int i = 0; i < 10; i++) {
         Ptr_Pos = &Pos[i][0];
         Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
-        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Swap_Image(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
         Img_Num[i] = Img_Tmp;
     }
     free(Img.img);
@@ -204,8 +212,8 @@ void Menu_Keyboard(unsigned char key, int x, int y) {
                 Menu_Choice = 1;
                 Set_Rect_Btn_Lvl();
             } else {
-                // system("xdg-open https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og"); ubuntu
-                system("start https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og");
+                // system("xdg-open https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og?sub_confirmation=1"); ubuntu
+                system("start https://www.youtube.com/channel/UCyRY53rs_lgyJ-p3PzZj0Og?sub_confirmation=1");
             }
             break;
         case MENU_STT_LVL:

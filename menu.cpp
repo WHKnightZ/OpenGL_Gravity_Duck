@@ -15,6 +15,77 @@ void Reload_Matrix_Game() {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void Load_Num() {
+    int Pos[][4] = {
+        {0, 0, 8, 8},
+        {8, 0, 3, 8},
+        {11, 0, 8, 8},
+        {19, 0, 8, 8},
+        {27, 0, 8, 8},
+        {35, 0, 8, 8},
+        {43, 0, 8, 8},
+        {51, 0, 8, 8},
+        {59, 0, 8, 8},
+        {67, 0, 8, 8}};
+    int *Ptr_Pos;
+    Image Img, Img_Tmp;
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Menu/Nums.png");
+    for (int i = 0; i < 10; i++) {
+        Ptr_Pos = &Pos[i][0];
+        Crop_Image(&Img, &Img_Tmp, *Ptr_Pos, *(Ptr_Pos + 1), *(Ptr_Pos + 2), *(Ptr_Pos + 3));
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Img_Num[i] = Img_Tmp;
+    }
+    free(Img.img);
+}
+
+void Set_Rect_Btn_Lvl() {
+    Rct_Menu_Btn_Lvl.Left = BTN_LVL_START_X + (Menu_Choice - 1) % BTN_LVL_MAX_PER_ROW * BTN_LVL_SIZE_FULL;
+    Rct_Menu_Btn_Lvl.Bottom = BTN_LVL_START_Y - (Menu_Choice - 1) / BTN_LVL_MAX_PER_ROW * BTN_LVL_SIZE_FULL;
+    Rct_Menu_Btn_Lvl.Right = Rct_Menu_Btn_Lvl.Left + BTN_LVL_SIZE;
+    Rct_Menu_Btn_Lvl.Top = Rct_Menu_Btn_Lvl.Bottom + BTN_LVL_SIZE;
+}
+
+void Init_Level() {
+    FILE *f;
+    int Level = 1, Pos_X, Pos_Y;
+    int Width, a, b, x, y = 16;
+    while (true) {
+        sprintf(Str, "Maps/%02d.txt", Level);
+        f = fopen(Str, "r");
+        if (f == NULL)
+            break;
+        Pos_X = BTN_LVL_START_INIT_X + ((Level - 1) % BTN_LVL_MAX_PER_ROW) * BTN_LVL_SIZE_FULL;
+        Pos_Y = BTN_LVL_START_INIT_Y - ((Level - 1) / BTN_LVL_MAX_PER_ROW) * BTN_LVL_SIZE_FULL;
+        Mix_Image(&Img_Menu_Lvl, &Img_Menu_Btn_Lvl_Pas, Pos_X, Pos_Y);
+        if (Level >= 10) {
+            a = Level / 10;
+            b = Level % 10;
+            Width = Img_Num[a].w + Img_Num[b].w + 2;
+            x = 20 - Width / 2;
+            Clone_Image(&Img_Menu_Btn_Lvl_Act, &Img_Menu_Btn_Lvl[Level]);
+            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[a], x, y);
+            Mix_Image(&Img_Menu_Lvl, &Img_Num[a], Pos_X + x, Pos_Y + y);
+            x += Img_Num[a].w + 2;
+            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[b], x, y);
+            Mix_Image(&Img_Menu_Lvl, &Img_Num[b], Pos_X + x, Pos_Y + y);
+        } else {
+            a = Level % 10;
+            x = 20 - Img_Num[a].w / 2;
+            Clone_Image(&Img_Menu_Btn_Lvl_Act, &Img_Menu_Btn_Lvl[Level]);
+            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[a], x, y);
+            Mix_Image(&Img_Menu_Lvl, &Img_Num[a], Pos_X + x, Pos_Y + y);
+        }
+        fclose(f);
+        Level++;
+    }
+    Menu_Max_Lvl = Level - 1;
+    free(Img_Menu_Btn_Lvl_Act.img);
+    free(Img_Menu_Btn_Lvl_Pas.img);
+    for (int i = 0; i < 10; i++)
+        free(Img_Num[i].img);
+}
+
 void Init_Game() {
     // GL
     glClearColor(0.322f, 0.188f, 0.129f, 1.0f);
@@ -27,10 +98,6 @@ void Init_Game() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // Game
     Init_Array_Func();
-    for (int i = 0; i < 10; i++) {
-        sprintf(Str, "Images/Nums/%d.png", i);
-        Load_Texture(&Img_Num[i], Str);
-    }
     Load_Texture(&Img_Menu_BG, "Images/Menu/BG.png");
     Load_Texture(&Img_Menu_Main, "Images/Menu/Main.png");
     Load_Texture(&Img_Menu_Btn[0], "Images/Menu/Btn_Start_Game.png");
@@ -72,6 +139,7 @@ void Init_Game() {
     }
     for (int i = 2; i < MAX_X - 2; i++)
         Map[MAX_Y - 2][i] = Map[1][i] = CL_TILE_TRAP;
+    Load_Num();
     Load_Egg();
     Load_Enemy();
     Load_Tile();
@@ -125,13 +193,6 @@ void Menu_Display() {
     }
     Menu_Display_Func[Menu_Form_Stt]();
     glutSwapBuffers();
-}
-
-void Set_Rect_Btn_Lvl() {
-    Rct_Menu_Btn_Lvl.Left = BTN_LVL_START_X + (Menu_Choice - 1) % BTN_LVL_MAX_PER_ROW * BTN_LVL_SIZE_FULL;
-    Rct_Menu_Btn_Lvl.Bottom = BTN_LVL_START_Y - (Menu_Choice - 1) / BTN_LVL_MAX_PER_ROW * BTN_LVL_SIZE_FULL;
-    Rct_Menu_Btn_Lvl.Right = Rct_Menu_Btn_Lvl.Left + BTN_LVL_SIZE;
-    Rct_Menu_Btn_Lvl.Top = Rct_Menu_Btn_Lvl.Bottom + BTN_LVL_SIZE;
 }
 
 void Menu_Keyboard(unsigned char key, int x, int y) {

@@ -1,10 +1,15 @@
 void Load_Tile() {
-    Image Img;
+    Image Img, Img_Tmp;
+    loadPng(&Img.img, &Img.w, &Img.h, "Images/Game/Tiles.png");
+    int x, y;
     for (int i = 0; i < TILE_MAX; i++) {
-        sprintf(Str, "Images/Tiles/%02d.png", i);
-        Load_Texture(&Img, Str);
-        Imgd_Tile[i] = Img.img;
+        x = (i % 11) * TILE_SIZE;
+        y = (i / 11) * TILE_SIZE;
+        Crop_Image(&Img, &Img_Tmp, x, y, TILE_SIZE, TILE_SIZE);
+        swapImage(Img_Tmp.img, Img_Tmp.w, Img_Tmp.h);
+        Imgd_Tile[i] = Img_Tmp.img;
     }
+    free(Img.img);
 }
 
 void Create_Image_Game_Back() {
@@ -260,47 +265,6 @@ void Load_Texture(Image *img, const char *path) {
 
 void Map_Texture(Image *img) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img->w, img->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img->img);
-}
-
-void Init_Level() {
-    FILE *f;
-    int Level = 1, Pos_X, Pos_Y;
-    int Width, a, b, x, y = 16;
-    while (true) {
-        sprintf(Str, "Maps/%02d.txt", Level);
-        f = fopen(Str, "r");
-        if (f == NULL)
-            break;
-        Pos_X = BTN_LVL_START_X + ((Level - 1) % BTN_LVL_MAX_PER_ROW) * BTN_LVL_SIZE_FULL;
-        Pos_Y = BTN_LVL_START_Y - ((Level - 1) / BTN_LVL_MAX_PER_ROW) * BTN_LVL_SIZE_FULL;
-        Mix_Image(&Img_Menu_Lvl, &Img_Menu_Btn_Lvl_Pas, Pos_X, Pos_Y);
-        if (Level >= 10) {
-            a = Level / 10;
-            b = Level % 10;
-            Width = Img_Num[a].w + Img_Num[b].w + 2;
-            x = 20 - Width / 2;
-            Clone_Image(&Img_Menu_Btn_Lvl_Act, &Img_Menu_Btn_Lvl[Level]);
-            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[a], x, y);
-            Mix_Image(&Img_Menu_Lvl, &Img_Num[a], Pos_X + x, Pos_Y + y);
-            x += Img_Num[a].w + 2;
-            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[b], x, y);
-            Mix_Image(&Img_Menu_Lvl, &Img_Num[b], Pos_X + x, Pos_Y + y);
-        } else {
-            a = Level % 10;
-            x = 20 - Img_Num[a].w / 2;
-            Clone_Image(&Img_Menu_Btn_Lvl_Act, &Img_Menu_Btn_Lvl[Level]);
-            Mix_Image(&Img_Menu_Btn_Lvl[Level], &Img_Num[a], x, y);
-            Mix_Image(&Img_Menu_Lvl, &Img_Num[a], Pos_X + x, Pos_Y + y);
-        }
-        fclose(f);
-        Level++;
-    }
-    Menu_Max_Lvl = Level - 1;
-    Set_Rect_Btn_Lvl();
-    free(Img_Menu_Btn_Lvl_Act.img);
-    free(Img_Menu_Btn_Lvl_Pas.img);
-    for (int i = 0; i < 10; i++)
-        free(Img_Num[i].img);
 }
 
 void Timer(int value) {

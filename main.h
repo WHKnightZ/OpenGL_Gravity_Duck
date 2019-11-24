@@ -34,6 +34,8 @@
 #define SWITCH_MAX 10
 #define SWITCH_SIZE 20
 
+#define BTN_LVL_START_INIT_X 67
+#define BTN_LVL_START_INIT_Y 224
 #define BTN_LVL_START_X 153
 #define BTN_LVL_START_Y 256
 #define BTN_LVL_SIZE 40
@@ -44,7 +46,7 @@
 
 #define ENEMY_MAX 25
 
-#define BULLET_FLY_CHASE_OFFSET 2.0f
+#define BULLET_FLY_CHASE_OFFSET 3.0f
 
 int POS_X, POS_Y;
 

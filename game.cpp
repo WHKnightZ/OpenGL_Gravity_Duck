@@ -15,6 +15,8 @@ void Load_Tile() {
 void Create_Image_Game_Back() {
     if (Game_Init)
         free(Img_Game_Back.img);
+    else
+    	Game_Init = 1;
     Clone_Image(&Img_Game_BG, &Img_Game_Back);
     Image Img;
     Img.w = Img.h = 32;
@@ -24,7 +26,6 @@ void Create_Image_Game_Back() {
                 Img.img = Imgd_Tile[Map_Tile[i][j]];
                 Mix_Image(&Img_Game_Back, &Img, (j - 2) * TILE_SIZE, (i - 2) * TILE_SIZE);
             }
-    Game_Init = 1;
 }
 
 void Load_Egg() {
@@ -90,7 +91,7 @@ int Import_Map(int Level) {
             if (Map_Tile[i][j] != -1)
                 Map[i][j] = Tile_Mapping[Map_Tile[i][j]];
             else
-                Map[i][j] = 1;
+                Map[i][j] = CL_TILE_NOTHING;
         }
     }
     Map[dest_y][dest_x] = CL_TILE_DEST;

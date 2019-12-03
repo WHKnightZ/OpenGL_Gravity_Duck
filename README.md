@@ -57,7 +57,7 @@ Offset_Bullet = 4 => Enemy_1_Latency = 64 / 4 = 16<br />
 
 ## Conclusion:
 
-Full 40 Maps - Thank to Armor Games<br />
+Full 40 Maps - Thanks to Armor Games<br />
 Like original game 80%<br />
 I fixed some places to make game more reasonable :D<br />
 
